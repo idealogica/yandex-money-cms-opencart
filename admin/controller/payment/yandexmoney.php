@@ -173,6 +173,18 @@ class ControllerPaymentYandexMoney extends Controller {
 			$this->data['yandexmoney_method_wm'] = $this->config->get('yandexmoney_method_wm');
 		}
 
+		if (isset($this->request->post['yandexmoney_method_ab'])) {
+			$this->data['yandexmoney_method_ab'] = $this->request->post['yandexmoney_method_ab'];
+		} else {
+			$this->data['yandexmoney_method_ab'] = $this->config->get('yandexmoney_method_ab');
+		}
+
+		if (isset($this->request->post['yandexmoney_method_sb'])) {
+			$this->data['yandexmoney_method_sb'] = $this->request->post['yandexmoney_method_sb'];
+		} else {
+			$this->data['yandexmoney_method_sb'] = $this->config->get('yandexmoney_method_sb');
+		}
+
 		if (isset($this->request->post['yandexmoney_mode'])) {
 			$this->data['yandexmoney_mode'] = $this->request->post['yandexmoney_mode'];
 		} else {

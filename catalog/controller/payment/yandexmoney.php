@@ -90,6 +90,8 @@ define("YM_AC", 'AC');
 define("YM_GP", 'GP');
 define("YM_MC", 'MC');
 define("YM_WM", 'WM');
+define("YM_AB", 'AB');
+define("YM_SB", 'SB');
 
 Class YandexMoneyObj {
 	public $test_mode;

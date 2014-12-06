@@ -8,6 +8,8 @@ $_['text_method_cards'] = 'Банковская карта';
 $_['text_method_cash'] = 'Наличными или в терминалах партнеров Яндекс.Денег';
 $_['text_method_mobile'] = 'Оплата со счета сотового телефона';
 $_['text_method_wm'] = 'WebMoney';
+$_['text_method_ab'] = 'AlphaClick';
+$_['text_method_sb'] = 'SberBank online';
 $_['text_order'] = 'Заказ';
 $_['text_comment'] = 'Комментарий';
 

@@ -35,6 +35,8 @@ $_['entry_method_cards']         = 'банковские карты VISA, Master
 $_['entry_method_cash']         = 'наличными в кассах и терминалах партнеров';
 $_['entry_method_mobile']         = 'оплата со счета мобильного телефона';
 $_['entry_method_wm']         = 'электронная валюта WebMoney';
+$_['entry_method_ab']         = 'Alpha-Click';
+$_['entry_method_ab']         = 'SberBank Online';
 
 $_['entry_shopid']         = 'Идентификатор вашего магазина в Яндекс.Деньгах (ShopID):';
 $_['entry_scid']         = 'Идентификатор витрины вашего магазина в Яндекс.Деньгах (scid):';

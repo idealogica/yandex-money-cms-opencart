@@ -31,6 +31,16 @@
 				<td><input type="radio" name="paymentType" value="WM" id="ym5"></td><td><label for="ym5"><?php echo $method_wm_text;?></label></td>
 			</tr>
 		   <?php } ?>
+		   <? if ($method_ab ){?>
+		   <tr class="highlight">
+				<td><input type="radio" name="paymentType" value="AB" id="ym6"></td><td><label for="ym6"><?php echo $method_ab_text;?></label></td>
+			</tr>
+		   <?php } ?>
+		   <? if ($method_sb ){?>
+		   <tr class="highlight">
+				<td><input type="radio" name="paymentType" value="SB" id="ym7"></td><td><label for="ym7"><?php echo $method_sb_text;?></label></td>
+			</tr>
+		   <?php } ?>
 		   </tbody>
 		   </table>
 		   <input type="hidden" name="shopid" value="<?php echo $shop_id;?>">
