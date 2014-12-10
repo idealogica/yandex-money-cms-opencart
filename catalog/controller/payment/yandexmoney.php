@@ -31,6 +31,8 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['method_cash'] = $this->config->get('yandexmoney_method_cash');
 		$this->data['method_mobile'] = $this->config->get('yandexmoney_method_mobile');
 		$this->data['method_wm'] = $this->config->get('yandexmoney_method_wm');
+		$this->data['method_ab'] = $this->config->get('yandexmoney_method_ab');
+		$this->data['method_sb'] = $this->config->get('yandexmoney_method_sb');
 
 		$this->data['method_label'] =  $this->language->get('text_method');
 		$this->data['method_ym_text'] =  $this->language->get('text_method_ym');

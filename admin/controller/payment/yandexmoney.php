@@ -51,6 +51,8 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['entry_method_cash'] = $this->language->get('entry_method_cash');
 		$this->data['entry_method_mobile'] = $this->language->get('entry_method_mobile');
 		$this->data['entry_method_wm'] = $this->language->get('entry_method_wm');
+		$this->data['entry_method_ab'] = $this->language->get('entry_method_ab');
+		$this->data['entry_method_sb'] = $this->language->get('entry_method_sb');
 
 		$this->data['entry_shopid'] = $this->language->get('entry_shopid');
 		$this->data['entry_scid'] = $this->language->get('entry_scid');
