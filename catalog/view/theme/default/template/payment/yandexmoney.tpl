@@ -74,13 +74,13 @@
 			   <tbody>
 			   <?php if ($method_ym){?>
 				<tr class="highlight">
-					<td><input type="radio" name="payment-type" value="PC" checked id="ym1"></td>
+					<td><input type="radio" name="paymentType" value="PC" checked id="ym1"></td>
 					<td><label for="ym1"><?php echo $method_ym_text;?></label></td>
 				</tr>
 			   <?php } ?>
 			   <?php if ($method_cards){?>
 			   <tr class="highlight">
-					<td><input type="radio" name="payment-type" value="AC" id="ym2"></td><td><label for="ym2"><?php echo $method_cards_text;?></label></td>
+					<td><input type="radio" name="paymentType" value="AC" id="ym2"></td><td><label for="ym2"><?php echo $method_cards_text;?></label></td>
 				</tr>
 				<?php } ?>
 				</tbody>
