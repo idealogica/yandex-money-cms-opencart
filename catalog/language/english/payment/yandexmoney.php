@@ -1,16 +1,16 @@
 <?php
 // Text
-$_['text_title'] = 'Яндекс.Деньги';
+$_['text_title'] = 'Yandex.Money';
 
-$_['text_method'] = 'Метод оплаты';
-$_['text_method_ym'] = 'Яндекс.Деньги';
-$_['text_method_cards'] = 'Банковская карта';
-$_['text_method_cash'] = 'Наличными или в терминалах партнеров Яндекс.Денег';
-$_['text_method_mobile'] = 'Оплата со счета сотового телефона';
+$_['text_method'] = 'Payment methods';
+$_['text_method_ym'] = 'Yandex.Money';
+$_['text_method_cards'] = 'Debit card';
+$_['text_method_cash'] = "In cash or in partner's terminals";
+$_['text_method_mobile'] = 'Payment from the account cell phone';
 $_['text_method_wm'] = 'WebMoney';
-$_['text_method_ab'] = 'AlphaClick';
-$_['text_method_sb'] = 'SberBank online';
-$_['text_order'] = 'Заказ';
-$_['text_comment'] = 'Комментарий';
+$_['text_method_ab'] = 'Alpha-Click';
+$_['text_method_sb'] = 'SberBank Online';
+$_['text_order'] = 'Order';
+$_['text_comment'] = 'Comment';
 
 ?>
