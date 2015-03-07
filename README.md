@@ -14,7 +14,7 @@
 * стандартный шаблон страницы заказа (checkout).
 
 ###Установка модуля
-Для установки данного модуля необходимо распаковать [архив](https://github.com/yandex-money/yandex-money-cms-opencart/archive/master.zip) в корень вашего сайта!
+Для установки данного модуля необходимо распаковать [архив](https://github.com/yandex-money/yandex-money-cms-opencart/archive/master.zip) и поместить папки `admin`, `catalog` в корень вашего сайта!
 
 Пожалуйста, обязательно делайте бекапы!
 
