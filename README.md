@@ -1,6 +1,6 @@
-#Y.CMS OpenCart 1.5
+#yandexmoney-opencart
 
-Модуль оплаты Y.CMS OpenCart 1.5 необходим для интеграции с сервисом [Яндекс.Касса](http://kassa.yandex.ru/) на базе CMS OpenCart. 
+Модуль оплаты yandexmoney-opencart необходим для интеграции с сервисом [Яндекс.Касса](http://kassa.yandex.ru/) на базе CMS OpenCart. 
 
 Доступные платежные методы, если вы работаете как юридические лицо:
 * **Банковские карты** -  Visa (включая Electron), MasterCard и Maestro любого банка мира
@@ -15,7 +15,6 @@
 
 ###Установка модуля
 Для установки данного модуля необходимо распаковать [архив](https://github.com/yandex-money/yandex-money-cms-opencart/archive/master.zip) и поместить папки `admin`, `catalog` в корень вашего сайта!
-
 Пожалуйста, обязательно делайте бекапы!
 
 ###Нашли ошибку или у вас есть предложение по улучшению модуля?
