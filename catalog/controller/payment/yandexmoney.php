@@ -40,6 +40,8 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['method_cash_text'] =  $this->language->get('text_method_cash');
 		$this->data['method_mobile_text'] =  $this->language->get('text_method_mobile');
 		$this->data['method_wm_text'] =  $this->language->get('text_method_wm');
+		$this->data['method_sb_text'] =  $this->language->get('text_method_sb');
+		$this->data['method_ab_text'] =  $this->language->get('text_method_ab');
 		$this->data['order_text'] =  $this->language->get('text_order');
 		
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/yandexmoney.tpl')) {
@@ -59,14 +61,14 @@ class ControllerPaymentYandexMoney extends Controller {
 		$ymObj->org_mode = ($mode == 2);
 		$ymObj->password = $this->config->get('yandexmoney_password');
 		$ymObj->shopid = $this->config->get('yandexmoney_shopid');
-
+		$order_id =0;
 		if ($ymObj->org_mode){
 			if ($callbackParams['action'] == 'checkOrder'){
 				$code = $ymObj->checkOrder($callbackParams);
 				$ymObj->sendCode($callbackParams, $code);
-				$order_id = (int)$callbackParams["orderNumber"];
 			}
 			if ($callbackParams['action'] == 'paymentAviso'){
+				$order_id = (int)$callbackParams["orderNumber"];
 				$ymObj->checkOrder($callbackParams, TRUE, TRUE);
 			}
 		}else{
