@@ -33,6 +33,8 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['method_wm'] = $this->config->get('yandexmoney_method_wm');
 		$this->data['method_ab'] = $this->config->get('yandexmoney_method_ab');
 		$this->data['method_sb'] = $this->config->get('yandexmoney_method_sb');
+		$this->data['method_ma'] = $this->config->get('yandexmoney_method_ma');
+		$this->data['method_pb'] = $this->config->get('yandexmoney_method_pb');
 
 		$this->data['method_label'] =  $this->language->get('text_method');
 		$this->data['method_ym_text'] =  $this->language->get('text_method_ym');
@@ -42,6 +44,9 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['method_wm_text'] =  $this->language->get('text_method_wm');
 		$this->data['method_sb_text'] =  $this->language->get('text_method_sb');
 		$this->data['method_ab_text'] =  $this->language->get('text_method_ab');
+		$this->data['method_ma_text'] =  $this->language->get('text_method_ma');
+		$this->data['method_pb_text'] =  $this->language->get('text_method_pb');
+		
 		$this->data['order_text'] =  $this->language->get('text_order');
 		
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/yandexmoney.tpl')) {

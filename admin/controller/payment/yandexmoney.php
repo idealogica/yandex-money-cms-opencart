@@ -53,6 +53,8 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['entry_method_wm'] = $this->language->get('entry_method_wm');
 		$this->data['entry_method_ab'] = $this->language->get('entry_method_ab');
 		$this->data['entry_method_sb'] = $this->language->get('entry_method_sb');
+		$this->data['entry_method_ma'] = $this->language->get('entry_method_ma');
+		$this->data['entry_method_pb'] = $this->language->get('entry_method_pb');
 
 		$this->data['entry_shopid'] = $this->language->get('entry_shopid');
 		$this->data['entry_scid'] = $this->language->get('entry_scid');
@@ -185,6 +187,18 @@ class ControllerPaymentYandexMoney extends Controller {
 			$this->data['yandexmoney_method_sb'] = $this->request->post['yandexmoney_method_sb'];
 		} else {
 			$this->data['yandexmoney_method_sb'] = $this->config->get('yandexmoney_method_sb');
+		}
+		
+		if (isset($this->request->post['yandexmoney_method_ma'])) {
+			$this->data['yandexmoney_method_ma'] = $this->request->post['yandexmoney_method_sb'];
+		} else {
+			$this->data['yandexmoney_method_ma'] = $this->config->get('yandexmoney_method_sb');
+		}
+		
+		if (isset($this->request->post['yandexmoney_method_sb'])) {
+			$this->data['yandexmoney_method_pb'] = $this->request->post['yandexmoney_method_sb'];
+		} else {
+			$this->data['yandexmoney_method_pb'] = $this->config->get('yandexmoney_method_sb');
 		}
 
 		if (isset($this->request->post['yandexmoney_mode'])) {
