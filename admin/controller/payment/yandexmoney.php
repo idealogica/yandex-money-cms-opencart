@@ -190,15 +190,15 @@ class ControllerPaymentYandexMoney extends Controller {
 		}
 		
 		if (isset($this->request->post['yandexmoney_method_ma'])) {
-			$this->data['yandexmoney_method_ma'] = $this->request->post['yandexmoney_method_sb'];
+			$this->data['yandexmoney_method_ma'] = $this->request->post['yandexmoney_method_ma'];
 		} else {
-			$this->data['yandexmoney_method_ma'] = $this->config->get('yandexmoney_method_sb');
+			$this->data['yandexmoney_method_ma'] = $this->config->get('yandexmoney_method_ma');
 		}
 		
-		if (isset($this->request->post['yandexmoney_method_sb'])) {
-			$this->data['yandexmoney_method_pb'] = $this->request->post['yandexmoney_method_sb'];
+		if (isset($this->request->post['yandexmoney_method_pb'])) {
+			$this->data['yandexmoney_method_pb'] = $this->request->post['yandexmoney_method_pb'];
 		} else {
-			$this->data['yandexmoney_method_pb'] = $this->config->get('yandexmoney_method_sb');
+			$this->data['yandexmoney_method_pb'] = $this->config->get('yandexmoney_method_pb');
 		}
 
 		if (isset($this->request->post['yandexmoney_mode'])) {
@@ -293,7 +293,9 @@ class ControllerPaymentYandexMoney extends Controller {
 		}
 		
 
-		if (!isset($this->request->post['yandexmoney_method_ym']) && !isset($this->request->post['yandexmoney_method_cards']) && !isset($this->request->post['yandexmoney_method_cash']) and !isset($this->request->post['yandexmoney_method_mobile']) and !isset($this->request->post['yandexmoney_method_wm'])  ) {
+		if (!isset($this->request->post['yandexmoney_method_ym']) and !isset($this->request->post['yandexmoney_method_cards']) and !isset($this->request->post['yandexmoney_method_cash']) and !isset($this->request->post['yandexmoney_method_mobile']) and !isset($this->request->post['yandexmoney_method_wm'])  
+		and !isset($this->request->post['yandexmoney_method_sb']) and !isset($this->request->post['yandexmoney_method_ab'])
+		and !isset($this->request->post['yandexmoney_method_pb']) and !isset($this->request->post['yandexmoney_method_ma'])) {
 			$this->error['methods'] = $this->language->get('error_methods');
 		}
 
