@@ -67,40 +67,27 @@ class ControllerPaymentYandexMoney extends Controller {
 		$ymObj->password = $this->config->get('yandexmoney_password');
 		$ymObj->shopid = $this->config->get('yandexmoney_shopid');
 		$order_id =0;
-		if ($ymObj->org_mode){
-			if ($callbackParams['action'] == 'checkOrder'){
-				$code = $ymObj->checkOrder($callbackParams);
-				$ymObj->sendCode($callbackParams, $code);
-			}
-			if ($callbackParams['action'] == 'paymentAviso'){
-				$order_id = (int)$callbackParams["orderNumber"];
-				$ymObj->checkOrder($callbackParams, TRUE, TRUE);
-			}
-		}else{
-			$check = $ymObj->individualCheck($callbackParams);
-			if (!$check){
-				exit;
-			}else{
-				$order_id = (int)$callbackParams["label"];
-			}
-		}
-
-		if ($order_id){
+		//
+		$order_id = ($ymObj->org_mode)?$callbackParams["orderNumber"]:$callbackParams["label"];
+		if ($ymObj->checkSign($callbackParams)){
 			$this->load->model('checkout/order');
 			$order_info = $this->model_checkout_order->getOrder($order_id);
-			$res = $this->model_checkout_order->confirm($order_id, $this->config->get('yandexmoney_order_status_id'));	
-			$order_info = $this->model_checkout_order->getOrder($order_id);
-		}		
+			if ($order_info!=false){
+				if ($callbackParams['action'] == 'paymentAviso'){
+					$res = $this->model_checkout_order->update($order_id, $this->config->get('yandexmoney_order_status_id'), "Номер транзакции: ".$callbackParams['invoiceId'].". Сумма: ".$callbackParams['orderSumAmount']);
+					$ymObj->sendCode($callbackParams, "0");
+				}else{
+					$res = $this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id'));
+					$ymObj->sendCode($callbackParams, "0");
+				}
+			}else{
+				$ymObj->sendCode($callbackParams, "100");
+			}
+		}else{
+			$ymObj->sendCode($callbackParams, "1");
+		}
 	}
 }
-
-define("YM_PC", 'PC');
-define("YM_AC", 'AC');
-define("YM_GP", 'GP');
-define("YM_MC", 'MC');
-define("YM_WM", 'WM');
-define("YM_AB", 'AB');
-define("YM_SB", 'SB');
 
 Class YandexMoneyObj {
 	public $test_mode;
@@ -127,13 +114,11 @@ Class YandexMoneyObj {
 	public $shopid;
 	public $password;
 	
-
-
 	/*constructor*/
 	public function __construct(){
 		
 	}
-
+	
 	public function getFormUrl(){
 		if (!$this->org_mode){
 			return $this->individualGetFormUrl();
@@ -159,55 +144,27 @@ Class YandexMoneyObj {
 	}
 
 	public function checkSign($callbackParams){
-		$string = $callbackParams['action'].';'.$callbackParams['orderSumAmount'].';'.$callbackParams['orderSumCurrencyPaycash'].';'.$callbackParams['orderSumBankPaycash'].';'.$callbackParams['shopId'].';'.$callbackParams['invoiceId'].';'.$callbackParams['customerNumber'].';'.$this->password;
-		$md5 = strtoupper(md5($string));
-		return ($callbackParams['md5']==$md5);
-	}
-
-	public function checkOrder($callbackParams, $sendCode=FALSE, $aviso=FALSE){ 
-		
-		if ($this->checkSign($callbackParams)){
-			$code = 0;
+		if ($this->org_mode){
+			$string = $callbackParams['action'].';'.$callbackParams['orderSumAmount'].';'.$callbackParams['orderSumCurrencyPaycash'].';'.$callbackParams['orderSumBankPaycash'].';'.$callbackParams['shopId'].';'.$callbackParams['invoiceId'].';'.$callbackParams['customerNumber'].';'.$this->password;
+			$md5 = strtoupper(md5($string));
+			return ($callbackParams['md5']==$md5);
 		}else{
-			$code = 1;
-		}
-		if ($sendCode){
-			if ($aviso){
-				$this->sendAviso($callbackParams, $code);	
-			}else{
-				$this->sendCode($callbackParams, $code);	
+			$string = $callbackParams['notification_type'].'&'.$callbackParams['operation_id'].'&'.$callbackParams['amount'].'&'.$callbackParams['currency'].'&'.$callbackParams['datetime'].'&'.$callbackParams['sender'].'&'.$callbackParams['codepro'].'&'.$this->password.'&'.$callbackParams['label'];
+			$check = (sha1($string) == $callbackParams['sha1_hash']);
+			if (!$check){
+				header('HTTP/1.0 401 Unauthorized');
+				return false;
 			}
-			exit;
-		}else{
-			return $code;
+			return true;
 		}
 	}
 
 	public function sendCode($callbackParams, $code){
+		if (!$this->org_mode) return false;
 		header("Content-type: text/xml; charset=utf-8");
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>
-			<checkOrderResponse performedDatetime="'.date("c").'" code="'.$code.'" invoiceId="'.$callbackParams['invoiceId'].'" shopId="'.$this->shopid.'"/>';
+			<'.$callbackParams['action'].'Response performedDatetime="'.date("c").'" code="'.$code.'" invoiceId="'.$callbackParams['invoiceId'].'" shopId="'.$this->shopid.'"/>';
 		echo $xml;
-	}
-
-	public function sendAviso($callbackParams, $code){
-		header("Content-type: text/xml; charset=utf-8");
-		$xml = '<?xml version="1.0" encoding="UTF-8"?>
-			<paymentAvisoResponse performedDatetime="'.date("c").'" code="'.$code.'" invoiceId="'.$callbackParams['invoiceId'].'" shopId="'.$this->shopid.'"/>';
-		echo $xml;
-	}
-
-	public function individualCheck($callbackParams){
-		$string = $callbackParams['notification_type'].'&'.$callbackParams['operation_id'].'&'.$callbackParams['amount'].'&'.$callbackParams['currency'].'&'.$callbackParams['datetime'].'&'.$callbackParams['sender'].'&'.$callbackParams['codepro'].'&'.$this->password.'&'.$callbackParams['label'];
-		$check = (sha1($string) == $callbackParams['sha1_hash']);
-		if (!$check){
-			header('HTTP/1.0 401 Unauthorized');
-			return false;
-		}
-		return true;
-	
 	}
 }
-
-
 ?>
