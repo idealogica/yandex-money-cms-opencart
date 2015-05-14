@@ -1,3 +1,6 @@
+### 14.05.2015
+* Added version number.
+
 ### 12.05.2015
 * Added compatible with Simple module
 * Rebuild reaction on request from Yandex.Money
