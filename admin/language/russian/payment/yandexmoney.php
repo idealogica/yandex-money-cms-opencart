@@ -13,10 +13,10 @@ $_['text_all_zones']       = 'Все зоны';
 $_['text_disabled']       = 'Выключено';
 $_['text_enabled']       = 'Включено';
 
-$_['text_welcome1']       = '<p>Модуль версии 1.0.0</p>
+$_['text_welcome1']       = '<p>Модуль версии 1.1.0</p>
 <p>Если у вас нет аккаунта в Яндекс-Деньги, то следует зарегистрироваться тут - <a href="https://money.yandex.ru/">https://money.yandex.ru/</a></p><p><b>ВАЖНО!</b> Вам нужно будет указать ссылку для приема HTTP уведомлений здесь - <a href="https://sp-money.yandex.ru/myservices/online.xml" target="_blank">https://sp-money.yandex.ru/myservices/online.xml</a>';
 
-$_['text_welcome2']       = '<p>Модуль версии 1.0.0</p>
+$_['text_welcome2']       = '<p>Модуль версии 1.1.0</p>
 <p>Если у вас нет аккаунта в Яндекс-Деньги, то следует зарегистрироваться тут - <a href="https://money.yandex.ru/joinups/">https://money.yandex.ru/joinups/</a></p>';
 
 $_['text_params']       = 'Параметры для заполнения в личном кабинете';

@@ -1,7 +1,53 @@
 <?php 
 class ControllerPaymentYandexMoney extends Controller {
 	private $error = array(); 
+	private function sendStatistics()
+	{
+		$headers = array();
+		$headers[] = 'Content-Type: application/x-www-form-urlencoded';
 
+		$this->load->model('tool/crypto');
+		$this->load->model('setting/setting');
+		$setting=$this->model_setting_setting->getSetting('yandexmoney');
+		$array = array(
+			'url' => $this->config->get('config_secure') ? HTTP_CATALOG : HTTPS_CATALOG,
+			'cms' => 'opencart',
+			'version' => VERSION,
+			'ver_mod' => '1.1.0',
+			'yacms' => false,
+			'email' => $this->config->get('config_email'),
+			'shopid' => $setting['yandexmoney_shopid'],
+			'settings' => array(
+				'kassa' => (bool) ($setting['yandexmoney_mode']==2)?true:false,
+				'p2p' => (bool) ($setting['yandexmoney_mode']!=2)?true:false
+			)
+		);
+
+		$key_crypt = gethostbyname($_SERVER['HTTP_HOST']);
+		$this->model_tool_crypto->setKey($key_crypt);
+		$array_crypt = $this->model_tool_crypto->encrypt($array);
+
+		$url = 'https://statcms.yamoney.ru/';
+		$curlOpt = array(
+			CURLOPT_HEADER => false,
+			CURLOPT_RETURNTRANSFER => true,
+			CURLOPT_SSL_VERIFYPEER => false,
+			CURLOPT_SSL_VERIFYHOST => false,
+			CURLINFO_HEADER_OUT => true,
+			CURLOPT_POST => true,
+		);
+
+		$curlOpt[CURLOPT_HTTPHEADER] = $headers;
+		$curlOpt[CURLOPT_POSTFIELDS] = http_build_query(array('data' => $array_crypt));
+
+		$curl = curl_init($url);
+		curl_setopt_array($curl, $curlOpt);
+		$rbody = curl_exec($curl);
+		$errno = curl_errno($curl);
+		$error = curl_error($curl);
+		$rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+		curl_close($curl);
+	}
 	public function index() {
 		$this->language->load('payment/yandexmoney');
 
@@ -10,8 +56,8 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->load->model('setting/setting');
 			
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('yandexmoney', $this->request->post);				
-			
+			$this->model_setting_setting->editSetting('yandexmoney', $this->request->post);
+			$this->sendStatistics();
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			$this->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));

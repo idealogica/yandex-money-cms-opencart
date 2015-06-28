@@ -1,13 +1,15 @@
+### 29.06.2015
+* Добавлена отправка статистических данных
+
 ### 14.05.2015
-* Added version number.
+* Добавлено отображение номера версии.
 
 ### 12.05.2015
-* Added compatible with Simple module
-* Rebuild reaction on request from Yandex.Money
-* Added information about the transaction on History page
-* Create changelog file.
+* Добавлена совместимость с шаблоном заказа модуля Simple
+* Переработана логика реакции на запросы платежного сервиса
+* Добавлен вывод дополнительной информации на странице История
+* Создан файл изменений.
 
 ### 11.04.2015
-* Fix save setting
-* Add new payment methods
-* Rename payment methods
+* Исправлено сохранение настроек
+* Добавлены новые и переименованы остальные способы оплаты 
