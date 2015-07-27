@@ -79,7 +79,15 @@
 <?php } ?>
 	<div class="buttons">
 		<div class="right">
-			<input type="submit" name="submit-button" value="<?php echo $button_confirm; ?>" class="button">
+			<input type="submit" id="button-confirm" name="submit-button" value="<?php echo $button_confirm; ?>" class="button">
 		</div>
 	</div>
 </form>
+<script type="text/javascript"><!--
+$('#button-confirm').bind('click', function() {
+	$.ajax({ 
+		type: 'get',
+		url: 'index.php?route=payment/yandexmoney/confirm',
+	});
+});
+//--></script> 

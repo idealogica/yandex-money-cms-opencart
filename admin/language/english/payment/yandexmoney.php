@@ -13,11 +13,10 @@ $_['text_all_zones']       = 'Все зоны';
 $_['text_disabled']       = 'Выключено';
 $_['text_enabled']       = 'Включено';
 
-$_['text_welcome1']       = '<p>Модуль версии 1.1.0</p>
-<p>Если у вас нет аккаунта в Яндекс-Деньги, то следует зарегистрироваться тут - <a href="https://money.yandex.ru/">https://money.yandex.ru/</a></p><p><b>ВАЖНО!</b> Вам нужно будет указать ссылку для приема HTTP уведомлений здесь - <a href="https://sp-money.yandex.ru/myservices/online.xml" target="_blank">https://sp-money.yandex.ru/myservices/online.xml</a>';
+$_['yandexmoney_license']       = '<p>Любое использование Вами программы означает полное и безоговорочное принятие Вами условий лицензионного договора, размещенного по адресу  <a href="https://money.yandex.ru/doc.xml?id=527132"> https://money.yandex.ru/doc.xml?id=527132 </a>(далее – «Лицензионный договор»). Если Вы не принимаете условия Лицензионного договора в полном объёме, Вы не имеете права использовать программу в каких-либо целях.</p>';
+$_['text_welcome1']       = '<p>Если у вас нет аккаунта в Яндекс-Деньги, то следует зарегистрироваться тут - <a href="https://money.yandex.ru/">https://money.yandex.ru/</a></p><p><b>ВАЖНО!</b> Вам нужно будет указать ссылку для приема HTTP уведомлений здесь - <a href="https://sp-money.yandex.ru/myservices/online.xml" target="_blank">https://sp-money.yandex.ru/myservices/online.xml</a>';
 
-$_['text_welcome2']       = '<p>Модуль версии 1.1.0</p>
-<p>Если у вас нет аккаунта в Яндекс-Деньги, то следует зарегистрироваться тут - <a href="https://money.yandex.ru/joinups/">https://money.yandex.ru/joinups/</a></p>';
+$_['text_welcome2']       = '<p>Для работы с модулем необходимо <a href="https://money.yandex.ru/joinups/">подключить магазин к Яндекc.Кассе</a>. После подключения вы получите параметры для приема платежей (идентификатор магазина — shopId и номер витрины — scid).</p>';
 
 $_['text_params']       = 'Параметры для заполнения в личном кабинете';
 $_['text_param_name']       = 'Название параметра';
@@ -26,6 +25,8 @@ $_['text_aviso1']       = 'Адрес приема HTTP уведомлений';
 $_['text_aviso2']       = 'Адрес приема HTTP уведомлений (paymentAvisoURL)';
 
 // Entry
+$_['entry_version']         = 'Версия модуля:';
+$_['entry_license']         = 'Лицензионный договор:';
 $_['entry_testmode']         = 'Использовать в тестовом режиме?';
 $_['entry_modes']         = 'Выберите способы оплаты:';
 $_['entry_mode1']         = 'На счет физического лица в электронной валюте Яндекс.Денег';

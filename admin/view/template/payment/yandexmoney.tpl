@@ -33,6 +33,14 @@
 			 </td>
           </tr>
 		 <tr>
+            <td><?php echo $entry_version; ?></td>
+            <td><?php echo $yandexmoney_version; ?></td>
+       </tr>
+		 <tr>
+            <td><?php echo $entry_license; ?></td>
+            <td><?php echo $yandexmoney_license; ?></td>
+       </tr>
+		 <tr>
             <td><span class="required">*</span> <?php echo $entry_testmode; ?></td>
             <td>
                 <?php if ($yandexmoney_testmode) { ?>
@@ -125,11 +133,11 @@
 				   </tr>
 				   <tr>
 						<td style="border: 1px black solid; padding: 5px;">successURL</td>
-						<td style="border: 1px black solid; padding: 5px;"><?php echo $shopSuccessURL?></td>
+						<td style="border: 1px black solid; padding: 5px;">динамический или <?php echo $shopSuccessURL?></td>
 				   </tr>
 				   <tr>
 						<td style="border: 1px black solid; padding: 5px;">failURL</td>
-						<td style="border: 1px black solid; padding: 5px;"><?php echo $shopFailURL?></td>
+						<td style="border: 1px black solid; padding: 5px;">динамический или <?php echo $shopFailURL?></td>
 				   </tr>
 				</table>
 			</td>

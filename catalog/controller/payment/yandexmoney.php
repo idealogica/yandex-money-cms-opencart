@@ -57,7 +57,10 @@ class ControllerPaymentYandexMoney extends Controller {
 		
 		$this->render();
 	}
-
+	public function confirm() {
+		$this->load->model('checkout/order');
+		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+	}
 	public function callback() {
     	$ymObj = new YandexMoneyObj();
 		$callbackParams = $this->request->post;

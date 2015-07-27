@@ -1,6 +1,7 @@
 <?php 
 class ControllerPaymentYandexMoney extends Controller {
-	private $error = array(); 
+	private $error = array();
+	private $ya_version= '1.2.0';
 	private function sendStatistics()
 	{
 		$headers = array();
@@ -13,7 +14,7 @@ class ControllerPaymentYandexMoney extends Controller {
 			'url' => $this->config->get('config_secure') ? HTTP_CATALOG : HTTPS_CATALOG,
 			'cms' => 'opencart',
 			'version' => VERSION,
-			'ver_mod' => '1.1.0',
+			'ver_mod' => $this->ya_version,
 			'yacms' => false,
 			'email' => $this->config->get('config_email'),
 			'shopid' => $setting['yandexmoney_shopid'],
@@ -65,11 +66,13 @@ class ControllerPaymentYandexMoney extends Controller {
 
 		
 		$url = new Url(HTTP_CATALOG, $this->config->get('config_secure') ? HTTP_CATALOG : HTTPS_CATALOG);
-		$this->data['check_url'] = $url->link('payment/yandexmoney/callback', 'check=1', 'SSL');
-		$this->data['callback_url'] = $url->link('payment/yandexmoney/callback', '', 'SSL');
+		$this->data['check_url'] = str_replace("http:", "https:",$url->link('payment/yandexmoney/callback', 'check=1', 'SSL'));
+		$this->data['callback_url'] = str_replace("http:", "https:",$url->link('payment/yandexmoney/callback', '', 'SSL'));
 		$this->data['shopSuccessURL'] = $url->link('checkout/success', '', 'SSL');
 		$this->data['shopFailURL'] = $url->link('checkout/failure', '', 'SSL');
-		
+		$this->data['yandexmoney_version'] = $this->ya_version;
+		$this->data['yandexmoney_license'] = $this->language->get('yandexmoney_license');
+				
 		$this->data['heading_title'] = $this->language->get('heading_title');
 
 		$this->data['text_payment'] = $this->language->get('text_pay');
@@ -87,6 +90,8 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['text_aviso1'] = $this->language->get('text_aviso1');
 		$this->data['text_aviso2'] = $this->language->get('text_aviso2');
 		
+		$this->data['entry_version'] = $this->language->get('entry_version');
+		$this->data['entry_license'] = $this->language->get('entry_license');
 		$this->data['entry_testmode'] = $this->language->get('entry_testmode');
 		$this->data['entry_modes'] = $this->language->get('entry_modes');
 		$this->data['entry_mode1'] = $this->language->get('entry_mode1');
