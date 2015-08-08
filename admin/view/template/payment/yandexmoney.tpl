@@ -172,7 +172,13 @@
               <span class="error"><?php echo $error_scid; ?></span>
               <?php } ?></td>
           </tr>
-         
+          <tr class="org">
+            <td><span class="required">*</span> <?php echo $entry_title; ?></td>
+            <td><input type="text" name="yandexmoney_title" value="<?php echo ($yandexmoney_title=='')?$title_default:$yandexmoney_title; ?>" />
+              <?php if ($error_title) { ?>
+              <span class="error"><?php echo $error_title; ?></span>
+              <?php } ?></td>
+          </tr>
           <tr>
             <td>
 				<?php echo $entry_total; ?>

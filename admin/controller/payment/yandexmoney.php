@@ -1,7 +1,7 @@
 <?php 
 class ControllerPaymentYandexMoney extends Controller {
 	private $error = array();
-	private $ya_version= '1.2.0';
+	private $ya_version= '1.3.0';
 	private function sendStatistics()
 	{
 		$headers = array();
@@ -89,6 +89,7 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['text_param_value'] = $this->language->get('text_param_value');
 		$this->data['text_aviso1'] = $this->language->get('text_aviso1');
 		$this->data['text_aviso2'] = $this->language->get('text_aviso2');
+		$this->data['title_default'] = $this->language->get('title_default');
 		
 		$this->data['entry_version'] = $this->language->get('entry_version');
 		$this->data['entry_license'] = $this->language->get('entry_license');
@@ -109,6 +110,7 @@ class ControllerPaymentYandexMoney extends Controller {
 
 		$this->data['entry_shopid'] = $this->language->get('entry_shopid');
 		$this->data['entry_scid'] = $this->language->get('entry_scid');
+		$this->data['entry_title'] = $this->language->get('entry_title');
 		$this->data['entry_total'] = $this->language->get('entry_total');
 		$this->data['entry_total2'] = $this->language->get('entry_total2');
 
@@ -159,6 +161,11 @@ class ControllerPaymentYandexMoney extends Controller {
 			$this->data['error_scid'] = $this->error['scid'];
 		} else {
 			$this->data['error_scid'] = '';
+		}
+		if (isset($this->error['title'])) { 
+			$this->data['error_title'] = $this->error['error_title'];
+		} else {
+			$this->data['error_title'] = '';
 		}
 		
 		
@@ -277,6 +284,12 @@ class ControllerPaymentYandexMoney extends Controller {
 			$this->data['yandexmoney_scid'] = $this->config->get('yandexmoney_scid');
 		}
 		
+		if (isset($this->request->post['yandexmoney_title'])) {
+			$this->data['yandexmoney_title'] = $this->request->post['yandexmoney_title'];
+		} else {
+			$this->data['yandexmoney_title'] = $this->config->get('yandexmoney_title');
+		}
+		
 		if (isset($this->request->post['yandexmoney_total'])) {
 			$this->data['yandexmoney_total'] = $this->request->post['yandexmoney_total'];
 		} else {
@@ -342,7 +355,9 @@ class ControllerPaymentYandexMoney extends Controller {
 		if (!$this->request->post['yandexmoney_scid'] && $this->request->post['yandexmoney_mode']==2) {
 			$this->error['scid'] = $this->language->get('error_scid');
 		}
-		
+		if (!$this->request->post['yandexmoney_title'] && $this->request->post['yandexmoney_mode']==2) {
+			$this->error['title'] = $this->language->get('error_title');
+		}
 
 		if (!isset($this->request->post['yandexmoney_method_ym']) and !isset($this->request->post['yandexmoney_method_cards']) and !isset($this->request->post['yandexmoney_method_cash']) and !isset($this->request->post['yandexmoney_method_mobile']) and !isset($this->request->post['yandexmoney_method_wm'])  
 		and !isset($this->request->post['yandexmoney_method_sb']) and !isset($this->request->post['yandexmoney_method_ab'])

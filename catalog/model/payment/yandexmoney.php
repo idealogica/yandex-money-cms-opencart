@@ -1,5 +1,4 @@
 <?php 
-
 class ModelPaymentYandexMoney extends Model {
 	public function getMethod($address, $total) {
 		$this->language->load('payment/yandexmoney');
@@ -21,7 +20,7 @@ class ModelPaymentYandexMoney extends Model {
 		if ($status) {
 			$method_data = array(
 				'code'       => 'yandexmoney',
-				'title'      => $this->language->get('text_title'),
+				'title'      => ((int)$this->config->get('yandexmoney_mode') == 2)?$this->config->get('yandexmoney_title'):$this->language->get('text_title'),
 				'sort_order' => $this->config->get('yandexmoney_sort_order')
 			);
 		}
@@ -29,5 +28,4 @@ class ModelPaymentYandexMoney extends Model {
 		return $method_data;
 	}
 }
-
 ?>
