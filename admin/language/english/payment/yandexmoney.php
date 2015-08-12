@@ -23,7 +23,7 @@ $_['text_param_name']       = 'Название параметра';
 $_['text_param_value']       = 'Значение';
 $_['text_aviso1']       = 'Адрес приема HTTP уведомлений';
 $_['text_aviso2']       = 'Адрес приема HTTP уведомлений (paymentAvisoURL)';
-$_['title_default']       = 'Оплата через Яндекс.Кассу';	
+$_['title_default']       = 'Yandex.Kassa (banking cards, e-wallet and other payment methods)';	
 
 // Entry
 $_['entry_version']         = 'Версия модуля:';
