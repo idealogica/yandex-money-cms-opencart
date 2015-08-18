@@ -12,6 +12,9 @@
 ###Требования к CMS OpenCart:
 * версия 1.5.4 - 1.5.6;
 
+###Совместимость с CMS Opencart 2.x
+Данный модуль совместим только с CMS Opencart версии 1.5.x. Для CMS Opencart 2.x нами разработан универсальный модуль, который можно [загрузить здесь](https://github.com/yandex-money/yandex-money-cms-opencart2).
+
 ###Установка модуля
 Для установки данного модуля необходимо распаковать [архив](https://github.com/yandex-money/yandex-money-cms-opencart/archive/master.zip) и поместить папки `admin`, `catalog` в корень вашего сайта!
 Пожалуйста, обязательно делайте бекапы!
