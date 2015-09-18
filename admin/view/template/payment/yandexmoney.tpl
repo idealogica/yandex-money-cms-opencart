@@ -8,6 +8,9 @@
   <?php if ($error_warning) { ?>
   <div class="warning"><?php echo $error_warning; ?></div>
   <?php } ?>
+    <?php if ($attention) { ?>
+  <div class="attention"><?php echo $attention; ?></div>
+  <?php } ?>
   <div class="box">
 	
     <div class="heading">
@@ -80,6 +83,7 @@
 					<input type="checkbox" name="yandexmoney_method_sb" value="1" id="ym_method_7"<?php if ($yandexmoney_method_sb){?> checked <?php } ?> /><label for="ym_method_7"><?php echo $entry_method_sb; ?></label> <br/>
 					<input type="checkbox" name="yandexmoney_method_ma" value="1" id="ym_method_8"<?php if ($yandexmoney_method_ma){?> checked <?php } ?> /><label for="ym_method_8"><?php echo $entry_method_ma; ?></label> <br/>
 					<input type="checkbox" name="yandexmoney_method_pb" value="1" id="ym_method_9"<?php if ($yandexmoney_method_pb){?> checked <?php } ?> /><label for="ym_method_9"><?php echo $entry_method_pb; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_mp" value="1" id="ym_method_10"<?php if ($yandexmoney_method_mp){?> checked <?php } ?> /><label for="ym_method_10"><?php echo $entry_method_mp; ?></label> <br/>
 				</div>
 				 <?php if ($error_methods) { ?>
 					<span class="error"><?php echo $error_methods; ?></span>
@@ -178,6 +182,17 @@
               <?php if ($error_title) { ?>
               <span class="error"><?php echo $error_title; ?></span>
               <?php } ?></td>
+          </tr>
+			 <tr class="org">
+            <td><?php echo $entry_page_mpos; ?></td>
+            <td><select name="yandexmoney_page_mpos">
+				<?php foreach ($pages_mpos as $page_mpos) { 
+					if ($page_mpos['information_id'] == $yandexmoney_page_mpos) $mp_checked=true; else $mp_checked=false;
+				?> 
+					<option value="<?php echo $page_mpos['information_id']; ?>" <?php echo ($mp_checked)?'selected="selected"':'';?>>
+					<?php echo $page_mpos['title']; ?></option>
+				<?php } ?>			
+				</select>
           </tr>
           <tr>
             <td>

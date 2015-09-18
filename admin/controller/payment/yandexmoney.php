@@ -1,12 +1,10 @@
 <?php 
 class ControllerPaymentYandexMoney extends Controller {
 	private $error = array();
-	private $ya_version= '1.3.0';
+	private $ya_version= '1.4.0';
 	private function sendStatistics()
 	{
-		$headers = array();
-		$headers[] = 'Content-Type: application/x-www-form-urlencoded';
-
+		$this->language->load('payment/yandexmoney');
 		$this->load->model('tool/crypto');
 		$this->load->model('setting/setting');
 		$setting=$this->model_setting_setting->getSetting('yandexmoney');
@@ -36,9 +34,10 @@ class ControllerPaymentYandexMoney extends Controller {
 			CURLOPT_SSL_VERIFYHOST => false,
 			CURLINFO_HEADER_OUT => true,
 			CURLOPT_POST => true,
+			CURLOPT_FRESH_CONNECT => TRUE,
 		);
 
-		$curlOpt[CURLOPT_HTTPHEADER] = $headers;
+		$curlOpt[CURLOPT_HTTPHEADER] = array('Content-Type: application/x-www-form-urlencoded');
 		$curlOpt[CURLOPT_POSTFIELDS] = http_build_query(array('data' => $array_crypt));
 
 		$curl = curl_init($url);
@@ -48,6 +47,19 @@ class ControllerPaymentYandexMoney extends Controller {
 		$error = curl_error($curl);
 		$rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		curl_close($curl);
+		$json=json_decode($rbody);
+		if ($rcode==200 && isset($json->new_version)){
+			return sprintf($this->language->get('text_need_update'),$json->new_version);
+		}else{
+			return false;
+		}
+	}
+	public function install() {
+		$this->log->write("install yandexmoney");
+	}
+	
+	public function uninstall() {
+		$this->log->write("uninstall yandexmoney");
 	}
 	public function index() {
 		$this->language->load('payment/yandexmoney');
@@ -55,13 +67,12 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		
 		$this->load->model('setting/setting');
-			
+		$this->data['attention'] = '';	
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting('yandexmoney', $this->request->post);
-			$this->sendStatistics();
 			$this->session->data['success'] = $this->language->get('text_success');
-
-			$this->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
+			$updater = $this->sendStatistics();
+			if ($updater) $this->data['attention'] = $updater;	else $this->redirect($this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL'));
 		}
 
 		
@@ -71,104 +82,13 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['shopSuccessURL'] = $url->link('checkout/success', '', 'SSL');
 		$this->data['shopFailURL'] = $url->link('checkout/failure', '', 'SSL');
 		$this->data['yandexmoney_version'] = $this->ya_version;
-		$this->data['yandexmoney_license'] = $this->language->get('yandexmoney_license');
+		
+		$list_language=array('yandexmoney_license','heading_title','text_payment','text_yes','text_no','text_disabled','text_enabled','text_all_zones','text_welcome1','text_welcome2','text_params','text_param_name','text_param_value','text_aviso1','text_aviso2','title_default','entry_version','entry_license','entry_testmode','entry_modes','entry_mode1','entry_mode2','entry_methods','entry_method_ym','entry_method_cards','entry_method_cash','entry_method_mobile','entry_method_wm','entry_method_ab','entry_method_sb','entry_method_ma','entry_method_pb','entry_method_mp','entry_page_mpos','entry_shopid','entry_scid','entry_title','entry_total','entry_total2','entry_password','entry_account','entry_order_status','entry_geo_zone','entry_status','entry_sort_order','button_save','button_cancel');
+		foreach ($list_language as $item) $this->data[$item] = $this->language->get($item);
+
+		$list_errors=array('warning','account','methods','account','password','shopid','scid','title');
+		foreach ($list_errors as $e_item) $this->data['error_'.$e_item] = (isset($this->error[$e_item]))?$this->error[$e_item]:'';
 				
-		$this->data['heading_title'] = $this->language->get('heading_title');
-
-		$this->data['text_payment'] = $this->language->get('text_pay');
-		$this->data['text_yes'] = $this->language->get('text_yes');
-		$this->data['text_no'] = $this->language->get('text_no');
-		$this->data['text_disabled'] = $this->language->get('text_disabled');
-		$this->data['text_enabled'] = $this->language->get('text_enabled');
-		$this->data['text_all_zones'] = $this->language->get('text_all_zones');
-
-		$this->data['text_welcome1'] = $this->language->get('text_welcome1');
-		$this->data['text_welcome2'] = $this->language->get('text_welcome2');
-		$this->data['text_params'] = $this->language->get('text_params');
-		$this->data['text_param_name'] = $this->language->get('text_param_name');
-		$this->data['text_param_value'] = $this->language->get('text_param_value');
-		$this->data['text_aviso1'] = $this->language->get('text_aviso1');
-		$this->data['text_aviso2'] = $this->language->get('text_aviso2');
-		$this->data['title_default'] = $this->language->get('title_default');
-		
-		$this->data['entry_version'] = $this->language->get('entry_version');
-		$this->data['entry_license'] = $this->language->get('entry_license');
-		$this->data['entry_testmode'] = $this->language->get('entry_testmode');
-		$this->data['entry_modes'] = $this->language->get('entry_modes');
-		$this->data['entry_mode1'] = $this->language->get('entry_mode1');
-		$this->data['entry_mode2'] = $this->language->get('entry_mode2');
-		$this->data['entry_methods'] = $this->language->get('entry_methods');
-		$this->data['entry_method_ym'] = $this->language->get('entry_method_ym');
-		$this->data['entry_method_cards'] = $this->language->get('entry_method_cards');
-		$this->data['entry_method_cash'] = $this->language->get('entry_method_cash');
-		$this->data['entry_method_mobile'] = $this->language->get('entry_method_mobile');
-		$this->data['entry_method_wm'] = $this->language->get('entry_method_wm');
-		$this->data['entry_method_ab'] = $this->language->get('entry_method_ab');
-		$this->data['entry_method_sb'] = $this->language->get('entry_method_sb');
-		$this->data['entry_method_ma'] = $this->language->get('entry_method_ma');
-		$this->data['entry_method_pb'] = $this->language->get('entry_method_pb');
-
-		$this->data['entry_shopid'] = $this->language->get('entry_shopid');
-		$this->data['entry_scid'] = $this->language->get('entry_scid');
-		$this->data['entry_title'] = $this->language->get('entry_title');
-		$this->data['entry_total'] = $this->language->get('entry_total');
-		$this->data['entry_total2'] = $this->language->get('entry_total2');
-
-		$this->data['entry_password'] = $this->language->get('entry_password');
-		$this->data['entry_account'] = $this->language->get('entry_account');
-
-		$this->data['entry_order_status'] = $this->language->get('entry_order_status');
-		$this->data['entry_geo_zone'] = $this->language->get('entry_geo_zone');
-		$this->data['entry_status'] = $this->language->get('entry_status');
-		$this->data['entry_sort_order'] = $this->language->get('entry_sort_order');
-		
-		
-		$this->data['button_save'] = $this->language->get('button_save');
-		$this->data['button_cancel'] = $this->language->get('button_cancel');
-
- 		if (isset($this->error['warning'])) {
-			$this->data['error_warning'] = $this->error['warning'];
-		} else {
-			$this->data['error_warning'] = '';
-		}
-
-		if (isset($this->error['account'])) { 
-			$this->data['error_account'] = $this->error['account'];
-		} else {
-			$this->data['error_account'] = '';
-		}
-		if (isset($this->error['methods'])) { 
-			$this->data['error_methods'] = $this->error['methods'];
-		} else {
-			$this->data['error_methods'] = '';
-		}
-		if (isset($this->error['account'])) { 
-			$this->data['error_account'] = $this->error['account'];
-		} else {
-			$this->data['error_account'] = '';
-		}
-		if (isset($this->error['password'])) { 
-			$this->data['error_password'] = $this->error['password'];
-		} else {
-			$this->data['error_password'] = '';
-		}
-		if (isset($this->error['shopid'])) { 
-			$this->data['error_shopid'] = $this->error['shopid'];
-		} else {
-			$this->data['error_shopid'] = '';
-		}
-		if (isset($this->error['scid'])) { 
-			$this->data['error_scid'] = $this->error['scid'];
-		} else {
-			$this->data['error_scid'] = '';
-		}
-		if (isset($this->error['title'])) { 
-			$this->data['error_title'] = $this->error['error_title'];
-		} else {
-			$this->data['error_title'] = '';
-		}
-		
-		
 		$this->data['breadcrumbs'] = array();
 
    		$this->data['breadcrumbs'][] = array(
@@ -190,143 +110,19 @@ class ControllerPaymentYandexMoney extends Controller {
    		);
 				
 		$this->data['action'] = $this->url->link('payment/yandexmoney', 'token=' . $this->session->data['token'], 'SSL');
-		
 		$this->data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
 		
-		if (isset($this->request->post['yandexmoney_testmode'])) {
-			$this->data['yandexmoney_testmode'] = $this->request->post['yandexmoney_testmode'];
-		} else {
-			$this->data['yandexmoney_testmode'] = $this->config->get('yandexmoney_testmode');
-		}
-	
-		if (isset($this->request->post['yandexmoney_account'])) {
-			$this->data['yandexmoney_account'] = $this->request->post['yandexmoney_account'];
-		} else {
-			$this->data['yandexmoney_account'] = $this->config->get('yandexmoney_account');
-		}
-
-		if (isset($this->request->post['yandexmoney_method_ym'])) {
-			$this->data['yandexmoney_method_ym'] = $this->request->post['yandexmoney_method_ym'];
-		} else {
-			$this->data['yandexmoney_method_ym'] = $this->config->get('yandexmoney_method_ym');
-		}
-
-		if (isset($this->request->post['yandexmoney_method_cards'])) {
-			$this->data['yandexmoney_method_cards'] = $this->request->post['yandexmoney_method_cards'];
-		} else {
-			$this->data['yandexmoney_method_cards'] = $this->config->get('yandexmoney_method_cards');
-		}
-		
-		if (isset($this->request->post['yandexmoney_method_cash'])) {
-			$this->data['yandexmoney_method_cash'] = $this->request->post['yandexmoney_method_cash'];
-		} else {
-			$this->data['yandexmoney_method_cash'] = $this->config->get('yandexmoney_method_cash');
-		}
-
-		if (isset($this->request->post['yandexmoney_method_mobile'])) {
-			$this->data['yandexmoney_method_mobile'] = $this->request->post['yandexmoney_method_mobile'];
-		} else {
-			$this->data['yandexmoney_method_mobile'] = $this->config->get('yandexmoney_method_mobile');
-		}
-
-		if (isset($this->request->post['yandexmoney_method_wm'])) {
-			$this->data['yandexmoney_method_wm'] = $this->request->post['yandexmoney_method_wm'];
-		} else {
-			$this->data['yandexmoney_method_wm'] = $this->config->get('yandexmoney_method_wm');
-		}
-
-		if (isset($this->request->post['yandexmoney_method_ab'])) {
-			$this->data['yandexmoney_method_ab'] = $this->request->post['yandexmoney_method_ab'];
-		} else {
-			$this->data['yandexmoney_method_ab'] = $this->config->get('yandexmoney_method_ab');
-		}
-
-		if (isset($this->request->post['yandexmoney_method_sb'])) {
-			$this->data['yandexmoney_method_sb'] = $this->request->post['yandexmoney_method_sb'];
-		} else {
-			$this->data['yandexmoney_method_sb'] = $this->config->get('yandexmoney_method_sb');
-		}
-		
-		if (isset($this->request->post['yandexmoney_method_ma'])) {
-			$this->data['yandexmoney_method_ma'] = $this->request->post['yandexmoney_method_ma'];
-		} else {
-			$this->data['yandexmoney_method_ma'] = $this->config->get('yandexmoney_method_ma');
-		}
-		
-		if (isset($this->request->post['yandexmoney_method_pb'])) {
-			$this->data['yandexmoney_method_pb'] = $this->request->post['yandexmoney_method_pb'];
-		} else {
-			$this->data['yandexmoney_method_pb'] = $this->config->get('yandexmoney_method_pb');
-		}
-
-		if (isset($this->request->post['yandexmoney_mode'])) {
-			$this->data['yandexmoney_mode'] = $this->request->post['yandexmoney_mode'];
-		} else {
-			$this->data['yandexmoney_mode'] = $this->config->get('yandexmoney_mode');
-		}
-
-		if (isset($this->request->post['yandexmoney_password'])) {
-			$this->data['yandexmoney_password'] = $this->request->post['yandexmoney_password'];
-		} else {
-			$this->data['yandexmoney_password'] = $this->config->get('yandexmoney_password');
-		}
-
-		if (isset($this->request->post['yandexmoney_shopid'])) {
-			$this->data['yandexmoney_shopid'] = $this->request->post['yandexmoney_shopid'];
-		} else {
-			$this->data['yandexmoney_shopid'] = $this->config->get('yandexmoney_shopid');
-		}
-		
-		
-		if (isset($this->request->post['yandexmoney_scid'])) {
-			$this->data['yandexmoney_scid'] = $this->request->post['yandexmoney_scid'];
-		} else {
-			$this->data['yandexmoney_scid'] = $this->config->get('yandexmoney_scid');
-		}
-		
-		if (isset($this->request->post['yandexmoney_title'])) {
-			$this->data['yandexmoney_title'] = $this->request->post['yandexmoney_title'];
-		} else {
-			$this->data['yandexmoney_title'] = $this->config->get('yandexmoney_title');
-		}
-		
-		if (isset($this->request->post['yandexmoney_total'])) {
-			$this->data['yandexmoney_total'] = $this->request->post['yandexmoney_total'];
-		} else {
-			$this->data['yandexmoney_total'] = $this->config->get('yandexmoney_total'); 
-		} 
-				
-		if (isset($this->request->post['yandexmoney_order_status_id'])) {
-			$this->data['yandexmoney_order_status_id'] = $this->request->post['yandexmoney_order_status_id'];
-		} else {
-			$this->data['yandexmoney_order_status_id'] = $this->config->get('yandexmoney_order_status_id'); 
-		} 
+		$list_setting=array('testmode','account','method_ym','method_cards','method_cash','method_mobile','method_wm','method_ab','method_sb','method_ma','method_pb','method_mp', 'page_mpos','mode','password','shopid', 'scid', 'title', 'total', 'order_status_id', 'geo_zone_id', 'status', 'sort_order');
 
 		$this->load->model('localisation/order_status');
-		
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
-		
-		if (isset($this->request->post['yandexmoney_geo_zone_id'])) {
-			$this->data['yandexmoney_geo_zone_id'] = $this->request->post['yandexmoney_geo_zone_id'];
-		} else {
-			$this->data['yandexmoney_geo_zone_id'] = $this->config->get('yandexmoney_geo_zone_id'); 
-		} 		
-		
 		$this->load->model('localisation/geo_zone');
-										
 		$this->data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
 		
-		if (isset($this->request->post['yandexmoney_status'])) {
-			$this->data['yandexmoney_status'] = $this->request->post['yandexmoney_status'];
-		} else {
-			$this->data['yandexmoney_status'] = $this->config->get('yandexmoney_status');
-		}
+		$this->load->model('catalog/information');
+		$this->data['pages_mpos'] = $this->model_catalog_information->getInformations();
 		
-		if (isset($this->request->post['yandexmoney_sort_order'])) {
-			$this->data['yandexmoney_sort_order'] = $this->request->post['yandexmoney_sort_order'];
-		} else {
-			$this->data['yandexmoney_sort_order'] = $this->config->get('yandexmoney_sort_order');
-		}
+		foreach ($list_setting as $s_item) $this->data['yandexmoney_'.$s_item]=(isset($this->request->post['yandexmoney_'.$s_item]))?$this->request->post['yandexmoney_'.$s_item]:$this->config->get('yandexmoney_'.$s_item);
 
 		$this->template = 'payment/yandexmoney.tpl';
 		$this->children = array(
@@ -358,19 +154,12 @@ class ControllerPaymentYandexMoney extends Controller {
 		if (!$this->request->post['yandexmoney_title'] && $this->request->post['yandexmoney_mode']==2) {
 			$this->error['title'] = $this->language->get('error_title');
 		}
-
-		if (!isset($this->request->post['yandexmoney_method_ym']) and !isset($this->request->post['yandexmoney_method_cards']) and !isset($this->request->post['yandexmoney_method_cash']) and !isset($this->request->post['yandexmoney_method_mobile']) and !isset($this->request->post['yandexmoney_method_wm'])  
-		and !isset($this->request->post['yandexmoney_method_sb']) and !isset($this->request->post['yandexmoney_method_ab'])
-		and !isset($this->request->post['yandexmoney_method_pb']) and !isset($this->request->post['yandexmoney_method_ma'])) {
-			$this->error['methods'] = $this->language->get('error_methods');
-		}
-
 		
-		if (!$this->error) {
-			return true;
-		} else {
-			return false;
-		}	
+		$list_methods=array('ym','cards','cash','mobile','wm','sb','ab','pb','ma','mp');
+		$bool_methods=false;
+		foreach ($list_methods as $m_item) if(isset($this->request->post['yandexmoney_method_'.$m_item])) $bool_methods = true;
+		if (!$bool_methods) $this->error['methods'] = $this->language->get('error_methods');
+		if (!$this->error) return true; else return false;
 	}
 }
 ?>

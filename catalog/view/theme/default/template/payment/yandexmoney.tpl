@@ -1,4 +1,4 @@
-<form method="POST" action="<?php echo $action; ?>">
+<form method="POST" id='YamoneyForm' action="<?php echo $action; ?>">
    <h3><?php echo $method_label; ?></h3>
    <table class="radio">
 		<tbody>
@@ -41,12 +41,17 @@
 		<?php } ?>
 		<?php if ($method_ma ){?>
 		<tr class="highlight">
-			<td><input type="radio" name="paymentType" value="MA" id="ym7"></td><td><label for="ym8"><?php echo $method_ma_text;?></label></td>
+			<td><input type="radio" name="paymentType" value="MA" id="ym8"></td><td><label for="ym8"><?php echo $method_ma_text;?></label></td>
 		</tr>
 		<?php } ?>
 		<?php if ($method_pb ){?>
 		<tr class="highlight">
-			<td><input type="radio" name="paymentType" value="PB" id="ym7"></td><td><label for="ym9"><?php echo $method_pb_text;?></label></td>
+			<td><input type="radio" name="paymentType" value="PB" id="ym9"></td><td><label for="ym9"><?php echo $method_pb_text;?></label></td>
+		</tr>
+		<?php } ?>
+		<?php if ($method_mp){?>
+		<tr class="highlight">
+			<td><input type="radio" name="paymentType" value="MP" id="ym10"></td><td><label for="ym10"><?php echo $method_mp_text;?></label></td>
 		</tr>
 		<?php } ?>
 		</tbody>
@@ -68,6 +73,7 @@
 	<input type="hidden" name="writable-targets" value="false">
 	<input type="hidden" name="comment-needed" value="true">
 	<input type="hidden" name="label" value="<?php echo $order_id;?>">
+	<input type="hidden" name="successURL" value="<?php echo $shopSuccessURL; ?>" >
 	<input type="hidden" name="quickpay-form" value="shop">
    <input type="hidden" name="targets" value="<?php echo $order_text;?> <?php echo $order_id;?>">
    <input type="hidden" name="sum" value="<?php echo $sum;?>" data-type="number" >
@@ -89,5 +95,14 @@ $('#button-confirm').bind('click', function() {
 		type: 'get',
 		url: 'index.php?route=payment/yandexmoney/confirm',
 	});
+});
+$('input[name=paymentType]').bind('click', function() {
+	if ($('input[name=paymentType]:checked').val()=='MP'){
+		var textMpos='<?php echo $mpos_page_url; ?>';
+		$("#YamoneyForm").attr('action', textMpos.replace(/&amp;/g, '&'));
+		
+	}else{
+		$("#YamoneyForm").attr('action', '<?php echo $action; ?>');
+	}
 });
 //--></script> 

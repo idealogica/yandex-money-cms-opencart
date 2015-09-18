@@ -26,27 +26,13 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['comment'] = $order_info['comment'];
 		$this->data['sum'] = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false);
 
-		$this->data['method_ym'] = $this->config->get('yandexmoney_method_ym');
-		$this->data['method_cards'] = $this->config->get('yandexmoney_method_cards');
-		$this->data['method_cash'] = $this->config->get('yandexmoney_method_cash');
-		$this->data['method_mobile'] = $this->config->get('yandexmoney_method_mobile');
-		$this->data['method_wm'] = $this->config->get('yandexmoney_method_wm');
-		$this->data['method_ab'] = $this->config->get('yandexmoney_method_ab');
-		$this->data['method_sb'] = $this->config->get('yandexmoney_method_sb');
-		$this->data['method_ma'] = $this->config->get('yandexmoney_method_ma');
-		$this->data['method_pb'] = $this->config->get('yandexmoney_method_pb');
-
+		$list_methods=array('ym','cards','cash','mobile','wm','sb','ab','pb','ma','mp');
+		foreach ($list_methods as $m_item){
+			$this->data['method_'.$m_item] = $this->config->get('yandexmoney_method_'.$m_item);
+			$this->data['method_'.$m_item.'_text'] =  $this->language->get('text_method_'.$m_item);
+		}
+		$this->data['mpos_page_url'] = $this->url->link('payment/yandexmoney/confirm','', 'SSL');
 		$this->data['method_label'] =  $this->language->get('text_method');
-		$this->data['method_ym_text'] =  $this->language->get('text_method_ym');
-		$this->data['method_cards_text'] =  $this->language->get('text_method_cards');
-		$this->data['method_cash_text'] =  $this->language->get('text_method_cash');
-		$this->data['method_mobile_text'] =  $this->language->get('text_method_mobile');
-		$this->data['method_wm_text'] =  $this->language->get('text_method_wm');
-		$this->data['method_sb_text'] =  $this->language->get('text_method_sb');
-		$this->data['method_ab_text'] =  $this->language->get('text_method_ab');
-		$this->data['method_ma_text'] =  $this->language->get('text_method_ma');
-		$this->data['method_pb_text'] =  $this->language->get('text_method_pb');
-		
 		$this->data['order_text'] =  $this->language->get('text_order');
 		
 		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/payment/yandexmoney.tpl')) {
@@ -59,7 +45,11 @@ class ControllerPaymentYandexMoney extends Controller {
 	}
 	public function confirm() {
 		$this->load->model('checkout/order');
-		$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+		$finish=$this->model_checkout_order->confirm($this->session->data['order_id'], $this->config->get('config_order_status_id'));
+		$this->cart->clear();
+		if (isset($this->request->post['paymentType']) && ($this->request->post['paymentType']=='MP')){
+			$this->redirect($this->url->link('information/information', 'information_id='.$this->config->get('yandexmoney_page_mpos'), 'SSL'));
+		}
 	}
 	public function callback() {
     	$ymObj = new YandexMoneyObj();
@@ -69,20 +59,26 @@ class ControllerPaymentYandexMoney extends Controller {
 		$ymObj->org_mode = ($mode == 2);
 		$ymObj->password = $this->config->get('yandexmoney_password');
 		$ymObj->shopid = $this->config->get('yandexmoney_shopid');
-		$order_id =0;
-		//
-		$order_id = ($ymObj->org_mode)?$callbackParams["orderNumber"]:$callbackParams["label"];
+		if (isset($callbackParams["orderNumber"]) || isset($callbackParams["label"])){
+			$order_id = ($ymObj->org_mode)?$callbackParams["orderNumber"]:$callbackParams["label"];
+		}else{ $order_id =0;}
 		if ($ymObj->checkSign($callbackParams)){
 			$this->load->model('checkout/order');
 			$order_info = $this->model_checkout_order->getOrder($order_id);
 			if ($order_info!=false){
-				if ($callbackParams['action'] == 'paymentAviso'){
-					$res = $this->model_checkout_order->update($order_id, $this->config->get('yandexmoney_order_status_id'), "Номер транзакции: ".$callbackParams['invoiceId'].". Сумма: ".$callbackParams['orderSumAmount']);
-					$ymObj->sendCode($callbackParams, "0");
+				$comment=($ymObj->org_mode && $callbackParams['paymentType']=="MP" && isset($callbackParams['orderDetails']))?$callbackParams['orderDetails']:'';
+				if (isset($callbackParams['action']) && $callbackParams['action'] == 'paymentAviso'){
+					$res = $this->model_checkout_order->update($order_id, $this->config->get('yandexmoney_order_status_id'), "Номер транзакции: ".$callbackParams['invoiceId'].". Сумма: ".$callbackParams['orderSumAmount'].' '.$comment);
+				}elseif (isset($callbackParams["label"]) && !$ymObj->org_mode){
+					$sender=($callbackParams['sender']!='')?"Номер кошелька Яндекс.Денег: ".$callbackParams['sender'].".":'';
+					$res = $this->model_checkout_order->update($order_id, $this->config->get('yandexmoney_order_status_id'), $sender." Сумма: ".$callbackParams['amount'].' '.$comment);
 				}else{
-					$res = $this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id'));
-					$ymObj->sendCode($callbackParams, "0");
+					$res = $this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id'),$comment);
 				}
+				$ymObj->sendCode($callbackParams, "0");
+			}elseif (isset($callbackParams['paymentType']) && $callbackParams['paymentType']=="MP"){
+				//Заказа нет и пока будем отвечать успехом
+				$ymObj->sendCode($callbackParams, "0");
 			}else{
 				$ymObj->sendCode($callbackParams, "100");
 			}
