@@ -26,7 +26,7 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['comment'] = $order_info['comment'];
 		$this->data['sum'] = $this->currency->format($order_info['total'], $order_info['currency_code'], $order_info['currency_value'], false);
 
-		$list_methods=array('ym','cards','cash','mobile','wm','sb','ab','pb','ma','mp');
+		$list_methods=array('ym','cards','cash','mobile','wm','sb','ab','pb','ma','qw','qp','mp');
 		foreach ($list_methods as $m_item){
 			$this->data['method_'.$m_item] = $this->config->get('yandexmoney_method_'.$m_item);
 			$this->data['method_'.$m_item.'_text'] =  $this->language->get('text_method_'.$m_item);

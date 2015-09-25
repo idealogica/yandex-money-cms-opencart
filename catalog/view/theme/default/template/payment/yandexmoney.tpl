@@ -49,6 +49,16 @@
 			<td><input type="radio" name="paymentType" value="PB" id="ym9"></td><td><label for="ym9"><?php echo $method_pb_text;?></label></td>
 		</tr>
 		<?php } ?>
+		<?php if ($method_qw ){?>
+		<tr class="highlight">
+			<td><input type="radio" name="paymentType" value="QW" id="ym11"></td><td><label for="ym11"><?php echo $method_qw_text;?></label></td>
+		</tr>
+		<?php } ?>
+		<?php if ($method_qp ){?>
+		<tr class="highlight">
+			<td><input type="radio" name="paymentType" value="QP" id="ym12"></td><td><label for="ym12"><?php echo $method_qp_text;?></label></td>
+		</tr>
+		<?php } ?>
 		<?php if ($method_mp){?>
 		<tr class="highlight">
 			<td><input type="radio" name="paymentType" value="MP" id="ym10"></td><td><label for="ym10"><?php echo $method_mp_text;?></label></td>

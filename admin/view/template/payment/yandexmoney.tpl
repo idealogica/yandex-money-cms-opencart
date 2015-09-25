@@ -83,6 +83,8 @@
 					<input type="checkbox" name="yandexmoney_method_sb" value="1" id="ym_method_7"<?php if ($yandexmoney_method_sb){?> checked <?php } ?> /><label for="ym_method_7"><?php echo $entry_method_sb; ?></label> <br/>
 					<input type="checkbox" name="yandexmoney_method_ma" value="1" id="ym_method_8"<?php if ($yandexmoney_method_ma){?> checked <?php } ?> /><label for="ym_method_8"><?php echo $entry_method_ma; ?></label> <br/>
 					<input type="checkbox" name="yandexmoney_method_pb" value="1" id="ym_method_9"<?php if ($yandexmoney_method_pb){?> checked <?php } ?> /><label for="ym_method_9"><?php echo $entry_method_pb; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_qw" value="1" id="ym_method_11"<?php if ($yandexmoney_method_qw){?> checked <?php } ?> /><label for="ym_method_11"><?php echo $entry_method_qw; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_qp" value="1" id="ym_method_12"<?php if ($yandexmoney_method_qp){?> checked <?php } ?> /><label for="ym_method_12"><?php echo $entry_method_qp; ?></label> <br/>
 					<input type="checkbox" name="yandexmoney_method_mp" value="1" id="ym_method_10"<?php if ($yandexmoney_method_mp){?> checked <?php } ?> /><label for="ym_method_10"><?php echo $entry_method_mp; ?></label> <br/>
 				</div>
 				 <?php if ($error_methods) { ?>

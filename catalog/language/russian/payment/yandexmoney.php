@@ -12,6 +12,8 @@ $_['text_method_ab']         = 'Альфа-Клик';
 $_['text_method_sb']         = 'Сбербанк: оплата по SMS или Сбербанк Онлайн';
 $_['text_method_ma']         = 'MasterPass';
 $_['text_method_pb']         = 'Интернет-банк Промсвязьбанка';
+$_['text_method_qw']         = 'QIWI Wallet';
+$_['text_method_qp']         = 'Доверительный платеж (Куппи.ру)';
 $_['text_method_mp']         = 'Мобильный терминал';
 
 $_['text_order'] = 'Заказ';
