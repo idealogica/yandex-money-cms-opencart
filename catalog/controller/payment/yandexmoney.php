@@ -146,7 +146,7 @@ Class YandexMoneyObj {
 		if ($this->org_mode){
 			$string = $callbackParams['action'].';'.$callbackParams['orderSumAmount'].';'.$callbackParams['orderSumCurrencyPaycash'].';'.$callbackParams['orderSumBankPaycash'].';'.$callbackParams['shopId'].';'.$callbackParams['invoiceId'].';'.$callbackParams['customerNumber'].';'.$this->password;
 			$md5 = strtoupper(md5($string));
-			return ($callbackParams['md5']==$md5);
+			return (strtoupper($callbackParams['md5'])==$md5);
 		}else{
 			$string = $callbackParams['notification_type'].'&'.$callbackParams['operation_id'].'&'.$callbackParams['amount'].'&'.$callbackParams['currency'].'&'.$callbackParams['datetime'].'&'.$callbackParams['sender'].'&'.$callbackParams['codepro'].'&'.$this->password.'&'.$callbackParams['label'];
 			$check = (sha1($string) == $callbackParams['sha1_hash']);
