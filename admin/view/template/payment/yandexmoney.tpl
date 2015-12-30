@@ -66,11 +66,15 @@
 				<select name="yandexmoney_mode" id="yandexmoney_mode" onchange="yandex_validate_mode();">
 					<option value="1"<?php if ($yandexmoney_mode == 1 or !$yandexmoney_mode){?> selected<?php } ?>><?php echo $entry_mode1; ?></option>
 					<option value="2"<?php if ($yandexmoney_mode == 2){?> selected<?php } ?>><?php echo $entry_mode2; ?></option>
+					<option value="3"<?php if ($yandexmoney_mode == 3){?> selected<?php } ?>><?php echo $entry_mode2; ?> с выбором оплаты на стороне Яндекс.Кассы</option>
 				</select>
 			</td>
           </tr>
-
-		   <tr>
+			<tr id="without-select">
+            <td></td>
+            <td><b>Внимание! Этот режим должен быть включен и на стороне сервиса Яндекс.Касса.</b><br> Доступные вам способы оплаты и тарифы фиксируются на стороне Яндекс.Кассы. Чтобы их поменять, напишите менеджеру Кассы на <a href='mailto:merchants@yamoney.ru'>merchants@yamoney.ru</a> или позвоните по телефону 8 800 250-66-99. </td>
+			</tr>
+		   <tr id="with-select">
             <td><span class="required">*</span> <?php echo $entry_methods; ?></td>
             <td>
 				<input type="checkbox" name="yandexmoney_method_ym" value="1" id="ym_method_1"<?php if ($yandexmoney_method_ym){?> checked <?php } ?> /><label for="ym_method_1"><?php echo $entry_method_ym; ?></label> <br/>
@@ -132,10 +136,6 @@
 				  <tr>
 						<td style="border: 1px black solid; padding: 5px;"><?php echo $text_aviso2?></td>
 						<td style="border: 1px black solid; padding: 5px;"><?php echo $callback_url?></td>
-				   </tr>
-				   <tr>
-						<td style="border: 1px black solid; padding: 5px;">checkURL</td>
-						<td style="border: 1px black solid; padding: 5px;"><?php echo $check_url?></td>
 				   </tr>
 				   <tr>
 						<td style="border: 1px black solid; padding: 5px;">successURL</td>
@@ -244,10 +244,20 @@
 		var yandex_mode = $("#yandexmoney_mode").val();
 		if (yandex_mode == 1){
 			$(".individ").show();
+			$("#without-select").hide();
 			$(".org").hide();
 		}else{
-			$(".org").show();
-			$(".individ").hide();
+			if (yandex_mode == 3){
+				$(".org").show();
+				$("#without-select").show();
+				$("#with-select").hide();
+				$(".individ").hide();
+			}else{
+				$(".org").show();
+				$("#with-select").show();
+				$("#without-select").hide();
+				$(".individ").hide();
+			}
 		}
 	}
 	$( document ).ready(function() {

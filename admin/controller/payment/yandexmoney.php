@@ -1,11 +1,9 @@
 <?php 
 class ControllerPaymentYandexMoney extends Controller {
 	private $error = array();
-	private $ya_version= '1.5.1';
-	private function sendStatistics()
-	{
+	private $ya_version= '1.6.0';
+	private function sendStatistics(){
 		$this->language->load('payment/yandexmoney');
-		$this->load->model('tool/crypto');
 		$this->load->model('setting/setting');
 		$setting=$this->model_setting_setting->getSetting('yandexmoney');
 		$array = array(
@@ -17,16 +15,14 @@ class ControllerPaymentYandexMoney extends Controller {
 			'email' => $this->config->get('config_email'),
 			'shopid' => $setting['yandexmoney_shopid'],
 			'settings' => array(
-				'kassa' => (bool) ($setting['yandexmoney_mode']==2)?true:false,
-				'p2p' => (bool) ($setting['yandexmoney_mode']!=2)?true:false
+				'kassa' => (bool) ($setting['yandexmoney_mode']>=2)?true:false,
+				'p2p' => (bool) ($setting['yandexmoney_mode']<2)?true:false
 			)
 		);
 
-		$key_crypt = gethostbyname($_SERVER['HTTP_HOST']);
-		$this->model_tool_crypto->setKey($key_crypt);
-		$array_crypt = $this->model_tool_crypto->encrypt($array);
+		$array_crypt = base64_encode(serialize($array));
 
-		$url = 'https://statcms.yamoney.ru/';
+		$url = 'https://statcms.yamoney.ru/v2/';
 		$curlOpt = array(
 			CURLOPT_HEADER => false,
 			CURLOPT_RETURNTRANSFER => true,
@@ -38,7 +34,7 @@ class ControllerPaymentYandexMoney extends Controller {
 		);
 
 		$curlOpt[CURLOPT_HTTPHEADER] = array('Content-Type: application/x-www-form-urlencoded');
-		$curlOpt[CURLOPT_POSTFIELDS] = http_build_query(array('data' => $array_crypt));
+		$curlOpt[CURLOPT_POSTFIELDS] = http_build_query(array('data' => $array_crypt, 'lbl'=>1));
 
 		$curl = curl_init($url);
 		curl_setopt_array($curl, $curlOpt);
@@ -77,7 +73,6 @@ class ControllerPaymentYandexMoney extends Controller {
 
 		
 		$url = new Url(HTTP_CATALOG, $this->config->get('config_secure') ? HTTP_CATALOG : HTTPS_CATALOG);
-		$this->data['check_url'] = str_replace("http:", "https:",$url->link('payment/yandexmoney/callback', 'check=1', 'SSL'));
 		$this->data['callback_url'] = str_replace("http:", "https:",$url->link('payment/yandexmoney/callback', '', 'SSL'));
 		$this->data['shopSuccessURL'] = $url->link('checkout/success', '', 'SSL');
 		$this->data['shopFailURL'] = $url->link('checkout/failure', '', 'SSL');
@@ -145,20 +140,20 @@ class ControllerPaymentYandexMoney extends Controller {
 			$this->error['account'] = $this->language->get('error_account');
 		}
 		
-		if (!$this->request->post['yandexmoney_shopid'] && $this->request->post['yandexmoney_mode']==2) {
+		if (!$this->request->post['yandexmoney_shopid'] && $this->request->post['yandexmoney_mode']>=2) {
 			$this->error['shopid'] = $this->language->get('error_shopid');
 		}
-		if (!$this->request->post['yandexmoney_scid'] && $this->request->post['yandexmoney_mode']==2) {
+		if (!$this->request->post['yandexmoney_scid'] && $this->request->post['yandexmoney_mode']>=2) {
 			$this->error['scid'] = $this->language->get('error_scid');
 		}
-		if (!$this->request->post['yandexmoney_title'] && $this->request->post['yandexmoney_mode']==2) {
+		if (!$this->request->post['yandexmoney_title'] && $this->request->post['yandexmoney_mode']>=2) {
 			$this->error['title'] = $this->language->get('error_title');
 		}
 		
 		$list_methods=array('ym','cards','cash','mobile','wm','sb','ab','pb','ma','qp','qw','mp');
 		$bool_methods=false;
 		foreach ($list_methods as $m_item) if(isset($this->request->post['yandexmoney_method_'.$m_item])) $bool_methods = true;
-		if (!$bool_methods) $this->error['methods'] = $this->language->get('error_methods');
+		if (!$bool_methods && $this->request->post['yandexmoney_mode']==2) $this->error['methods'] = $this->language->get('error_methods');
 		if (!$this->error) return true; else return false;
 	}
 }

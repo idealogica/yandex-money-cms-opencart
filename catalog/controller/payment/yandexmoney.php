@@ -6,13 +6,18 @@ class ControllerPaymentYandexMoney extends Controller {
 
 		$yandexMoney = new YandexMoneyObj();
 		$yandexMoney->test_mode = $this->config->get('yandexmoney_testmode');
-		$yandexMoney->org_mode = ((int)$this->config->get('yandexmoney_mode') == 2);
+		$yandexMoney->org_mode = ((int)$this->config->get('yandexmoney_mode') >= 2);
+		$yandexMoney->epl =((int)$this->config->get('yandexmoney_mode') == 3);
 		
 		$this->load->model('checkout/order');		
 		$order_info = $this->model_checkout_order->getOrder($this->session->data['order_id']);
 		
+		if (isset($order_info['email'])) $this->data['email'] = $order_info['email'];
+		if (isset($order_info['telephone'])) $this->data['phone'] = $order_info['telephone'];
+
 		$this->data['button_confirm'] = $this->language->get('button_confirm');
 		$this->data['action'] = $yandexMoney->getFormUrl();
+		$this->data['epl'] = $yandexMoney->epl;
 		$this->data['order_id'] = $this->session->data['order_id'];
 		$this->data['org_mode'] = $yandexMoney->org_mode;
 		$this->data['account'] = $this->config->get('yandexmoney_account');
@@ -56,7 +61,7 @@ class ControllerPaymentYandexMoney extends Controller {
 		$callbackParams = $this->request->post;
 		$callbackParams = $_POST;
 		$mode = $this->config->get('yandexmoney_mode');
-		$ymObj->org_mode = ($mode == 2);
+		$ymObj->org_mode = ($mode >= 2);
 		$ymObj->password = $this->config->get('yandexmoney_password');
 		$ymObj->shopid = $this->config->get('yandexmoney_shopid');
 		if (isset($callbackParams["orderNumber"]) || isset($callbackParams["label"])){
@@ -91,6 +96,7 @@ class ControllerPaymentYandexMoney extends Controller {
 Class YandexMoneyObj {
 	public $test_mode;
 	public $org_mode;
+	public $epl;
 
 	public $order_id;
 
