@@ -1,12 +1,15 @@
+<?php if (isset($header)) echo $header;?>
 <form method="POST" id='YamoneyForm' action="<?php echo $action; ?>">
    <?php if (!$epl){?>
 	<h3><?php echo $method_label; ?></h3>
    <table class="radio">
 		<tbody>
 		<?php foreach ($allow_methods as $m_val => $m_name){
-		if ($org_mode || in_array($m_val, array('AC','PC'))){	?>
+		if ($org_mode || in_array($m_val, array('AC','PC'))){	
+			$checked = ($default_method == $m_val)?'checked':''; 
+			?>
 			<tr class="highlight">
-				<td><input type="radio" name="paymentType" value="<?php echo $m_val; ?>" checked id="ym_<?php echo $m_val; ?>"></td>
+				<td><input type="radio" name="paymentType" value="<?php echo $m_val.'" '.$checked; ?> id="ym_<?php echo $m_val; ?>"></td>
 				<td><label for="ym_<?php echo $m_val; ?>"><?php echo $m_name; ?></label></td>
 			</tr>
 		<?php }} ?>
@@ -65,4 +68,5 @@ $('input[name=paymentType]').bind('click', function() {
 		$("#YamoneyForm").attr('action', '<?php echo $action; ?>');
 	}
 });
-//--></script> 
+//--></script>
+<?php if (isset($footer)) echo $footer;?>

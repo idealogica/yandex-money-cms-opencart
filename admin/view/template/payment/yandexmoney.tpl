@@ -70,11 +70,11 @@
 				</select>
 			</td>
           </tr>
-			<tr id="without-select">
+			<tr class="without-select">
             <td></td>
             <td><b>Внимание! Этот режим должен быть включен и на стороне сервиса Яндекс.Касса.</b><br> Доступные вам способы оплаты и тарифы фиксируются на стороне Яндекс.Кассы. Чтобы их поменять, напишите менеджеру Кассы на <a href='mailto:merchants@yamoney.ru'>merchants@yamoney.ru</a> или позвоните по телефону 8 800 250-66-99. </td>
 			</tr>
-		   <tr id="with-select">
+		   <tr class="with-select">
             <td><span class="required">*</span> <?php echo $entry_methods; ?></td>
             <td>
 				<input type="checkbox" name="yandexmoney_method_ym" value="1" id="ym_method_1"<?php if ($yandexmoney_method_ym){?> checked <?php } ?> /><label for="ym_method_1"><?php echo $entry_method_ym; ?></label> <br/>
@@ -95,8 +95,17 @@
 					<span class="error"><?php echo $error_methods; ?></span>
 				 <?php } ?>
 			</td>
-          </tr>
-		
+       </tr>
+		 <tr class="with-select">
+			<td><?php echo $entry_default_method; ?></td>
+			<td><select name="yandexmoney_default_method">
+				 <?php foreach ($default_methods as $name=>$value) { ?>
+				 <option value=<?php echo '"'.$name.'"'; 
+					echo ($name == $yandexmoney_default_method)?' selected="selected" ':'';?>><?php echo $value; ?></option>
+				 <?php } ?>
+			  </select></td>
+		 </tr>
+		 
 		 <tr class="individ">
 			<td></td>
 			<td><?php echo $text_welcome1;?></td>
@@ -138,16 +147,36 @@
 						<td style="border: 1px black solid; padding: 5px;"><?php echo $callback_url?></td>
 				   </tr>
 				   <tr>
-						<td style="border: 1px black solid; padding: 5px;">successURL</td>
-						<td style="border: 1px black solid; padding: 5px;">динамический или <?php echo $shopSuccessURL?></td>
-				   </tr>
-				   <tr>
-						<td style="border: 1px black solid; padding: 5px;">failURL</td>
-						<td style="border: 1px black solid; padding: 5px;">динамический или <?php echo $shopFailURL?></td>
+						<td style="border: 1px black solid; padding: 5px;">successURL / failURL</td>
+						<td style="border: 1px black solid; padding: 5px;">динамический</td>
 				   </tr>
 				</table>
 			</td>
 		  </tr>
+		  <tr>
+            <td><?php echo $entry_page_success; ?></td>
+            <td><select name="yandexmoney_page_success">
+				<option value='0' <?php if ($yandexmoney_page_success=='0') echo 'selected="selected"'; ?>>---Стандартная---</option>
+				<?php foreach ($pages_mpos as $page_success) { 
+					$mp_checked = ($page_success['information_id'] == $yandexmoney_page_success)?'selected="selected"':'';
+				?> 
+					<option value="<?php echo $page_success['information_id']; ?>" <?php echo $mp_checked;?>>
+					<?php echo $page_success['title']; ?></option>
+				<?php } ?>			
+				</select></td>
+        </tr>
+		  <tr class="org">
+            <td><?php echo $entry_page_fail; ?></td>
+            <td><select name="yandexmoney_page_fail">
+				<option value='0' <?php if ($yandexmoney_page_fail=='0') echo 'selected="selected"'; ?>>---Стандартная---</option>
+				<?php foreach ($pages_mpos as $page_fail) { 
+					$mp_checked = ($page_fail['information_id'] == $yandexmoney_page_fail)?'selected="selected"':'';
+				?> 
+					<option value="<?php echo $page_fail['information_id']; ?>" <?php echo $mp_checked;?>>
+					<?php echo $page_fail['title']; ?></option>
+				<?php } ?>		
+				</select></td>
+        </tr>
 
 		  <tr class="individ">
             <td><span class="required">*</span> <?php echo $entry_account; ?></td>
@@ -155,8 +184,7 @@
               <?php if ($error_account) { ?>
 					<span class="error"><?php echo $error_account; ?></span>
               <?php } ?></td>
-          </tr>
-
+        </tr>
 		  <tr>
             <td><span class="required">*</span> <?php echo $entry_password; ?></td>
             <td><input type="text" name="yandexmoney_password" value="<?php echo $yandexmoney_password; ?>" />
@@ -194,7 +222,7 @@
 					<option value="<?php echo $page_mpos['information_id']; ?>" <?php echo ($mp_checked)?'selected="selected"':'';?>>
 					<?php echo $page_mpos['title']; ?></option>
 				<?php } ?>			
-				</select>
+				</select></td>
           </tr>
           <tr>
             <td>
@@ -215,6 +243,10 @@
                 <?php } ?>
                 <?php } ?>
               </select></td>
+          </tr>
+			 <tr>
+            <td><?php echo $entry_notify; ?></td>
+            <td><input type="checkbox" name="yandexmoney_notify" value="1" <?php if ($yandexmoney_notify){?> checked <?php } ?> /></td>
           </tr>
           <tr>
             <td><?php echo $entry_geo_zone; ?></td>
@@ -244,18 +276,18 @@
 		var yandex_mode = $("#yandexmoney_mode").val();
 		if (yandex_mode == 1){
 			$(".individ").show();
-			$("#without-select").hide();
+			$(".without-select").hide();
 			$(".org").hide();
 		}else{
 			if (yandex_mode == 3){
 				$(".org").show();
-				$("#without-select").show();
-				$("#with-select").hide();
+				$(".without-select").show();
+				$(".with-select").hide();
 				$(".individ").hide();
 			}else{
 				$(".org").show();
-				$("#with-select").show();
-				$("#without-select").hide();
+				$(".with-select").show();
+				$(".without-select").hide();
 				$(".individ").hide();
 			}
 		}
