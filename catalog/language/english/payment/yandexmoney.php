@@ -16,6 +16,7 @@ $_['text_method_qw']         = 'Payment via QIWI Wallet';
 $_['text_method_qp']         = 'Trust payment (Qppi.ru)';
 $_['text_method_mp']         = 'Мобильный терминал';
 
+$_['text_repay']       = 'Оплатить';
 $_['text_order'] = 'Order';
 $_['text_comment'] = 'Comment';
 

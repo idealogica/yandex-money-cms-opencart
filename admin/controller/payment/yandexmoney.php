@@ -1,7 +1,7 @@
 <?php 
 class ControllerPaymentYandexMoney extends Controller {
 	private $error = array();
-	private $ya_version= '1.6.0';
+	private $ya_version= '1.7.0';
 	private function sendStatistics(){
 		$this->language->load('payment/yandexmoney');
 		$this->load->model('setting/setting');
@@ -78,7 +78,7 @@ class ControllerPaymentYandexMoney extends Controller {
 		$this->data['shopFailURL'] = $url->link('checkout/failure', '', 'SSL');
 		$this->data['yandexmoney_version'] = $this->ya_version;
 		
-		$list_language=array('yandexmoney_license','heading_title','text_payment','text_yes','text_no','text_disabled','text_enabled','text_all_zones','text_welcome1','text_welcome2','text_params','text_param_name','text_param_value','text_aviso1','text_aviso2','title_default','entry_version','entry_license','entry_testmode','entry_modes','entry_mode1','entry_mode2','entry_methods','entry_method_ym','entry_method_cards','entry_method_cash','entry_method_mobile','entry_method_wm','entry_method_ab','entry_method_sb','entry_method_ma','entry_method_pb','entry_method_qw','entry_method_qp','entry_method_mp','entry_page_mpos','entry_shopid','entry_scid','entry_title','entry_total','entry_total2','entry_password','entry_account','entry_order_status','entry_geo_zone','entry_status','entry_sort_order','button_save','button_cancel');
+		$list_language=array('yandexmoney_license','heading_title','text_payment','text_yes','text_no','text_disabled','text_enabled','text_all_zones','text_welcome1','text_welcome2','text_params','text_param_name','text_param_value','text_aviso1','text_aviso2','title_default','entry_version','entry_license','entry_testmode','entry_modes','entry_mode1','entry_mode2','entry_methods','entry_method_ym','entry_method_cards','entry_method_cash','entry_method_mobile','entry_method_wm','entry_method_ab','entry_method_sb','entry_method_ma','entry_method_pb','entry_method_qw','entry_method_qp','entry_method_mp','entry_default_method','entry_page_mpos','entry_page_success','entry_page_fail','entry_shopid','entry_scid','entry_title','entry_total','entry_total2','entry_password','entry_account','entry_order_status','entry_notify','entry_geo_zone','entry_status','entry_sort_order','button_save','button_cancel');
 		foreach ($list_language as $item) $this->data[$item] = $this->language->get($item);
 
 		$list_errors=array('warning','account','methods','account','password','shopid','scid','title');
@@ -103,11 +103,13 @@ class ControllerPaymentYandexMoney extends Controller {
 			'href'      => $this->url->link('payment/yandexmoney', 'token=' . $this->session->data['token'], 'SSL'),      		
       		'separator' => ' :: '
    		);
-				
+		foreach (array('PC'=>'ym', 'AC'=>'cards', 'GP'=>'cash', 'MC'=>'mobile', 'WM'=>'wm', 'SB'=>'sb', 'AB'=>'ab', 'PB'=>'pb', 'MA'=>'ma', 'QW'=>'qw', 'QP'=>'qp', 'MP'=>'mp') as $name => $value){
+			if ($this->config->get('yandexmoney_mode')>=2 || in_array($name, array('AC','PC'))) $this->data['default_methods'][$name] = $this->language->get('entry_method_'.$value);
+		}
 		$this->data['action'] = $this->url->link('payment/yandexmoney', 'token=' . $this->session->data['token'], 'SSL');
 		$this->data['cancel'] = $this->url->link('extension/payment', 'token=' . $this->session->data['token'], 'SSL');
 		
-		$list_setting=array('testmode','account','method_ym','method_cards','method_cash','method_mobile','method_wm','method_ab','method_sb','method_ma','method_pb','method_qw','method_qp','method_mp', 'page_mpos','mode','password','shopid', 'scid', 'title', 'total', 'order_status_id', 'geo_zone_id', 'status', 'sort_order');
+		$list_setting=array('testmode','account','method_ym','method_cards','method_cash','method_mobile','method_wm','method_ab','method_sb','method_ma','method_pb','method_qw','method_qp','method_mp', 'default_method', 'page_mpos','page_success','page_fail','mode','password','shopid', 'scid', 'title', 'total', 'order_status_id', 'notify', 'geo_zone_id', 'status', 'sort_order');
 
 		$this->load->model('localisation/order_status');
 		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();

@@ -16,6 +16,7 @@ $_['text_method_qw']         = 'QIWI Wallet';
 $_['text_method_qp']         = 'Доверительный платеж (Куппи.ру)';
 $_['text_method_mp']         = 'Мобильный терминал';
 
+$_['text_repay']       = 'Оплатить';
 $_['text_order'] = 'Заказ';
 $_['text_comment'] = 'Комментарий';
 
