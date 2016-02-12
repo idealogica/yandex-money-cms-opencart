@@ -64,32 +64,32 @@
             <td><span class="required">*</span> <?php echo $entry_modes; ?></td>
             <td>
 				<select name="yandexmoney_mode" id="yandexmoney_mode" onchange="yandex_validate_mode();">
-					<option value="1"<?php if ($yandexmoney_mode == 1 or !$yandexmoney_mode){?> selected<?php } ?>><?php echo $entry_mode1; ?></option>
-					<option value="2"<?php if ($yandexmoney_mode == 2){?> selected<?php } ?>><?php echo $entry_mode2; ?></option>
-					<option value="3"<?php if ($yandexmoney_mode == 3){?> selected<?php } ?>><?php echo $entry_mode2; ?> с выбором оплаты на стороне Яндекс.Кассы</option>
+					<option value="1"<?php if ($yandexmoney_mode == 1 or !$yandexmoney_mode){ ?> selected<?php } ?>><?php echo $entry_mode1; ?></option>
+					<option value="2"<?php if ($yandexmoney_mode == 2){ ?> selected<?php } ?>><?php echo $entry_mode2; ?></option>
+					<option value="3"<?php if ($yandexmoney_mode == 3){ ?> selected<?php } ?>><?php echo $entry_mode3; ?></option>
 				</select>
 			</td>
           </tr>
 			<tr class="without-select">
-            <td></td>
-            <td><b>Внимание! Этот режим должен быть включен и на стороне сервиса Яндекс.Касса.</b><br> Доступные вам способы оплаты и тарифы фиксируются на стороне Яндекс.Кассы. Чтобы их поменять, напишите менеджеру Кассы на <a href='mailto:merchants@yamoney.ru'>merchants@yamoney.ru</a> или позвоните по телефону 8 800 250-66-99. </td>
+				<td></td>
+				<td><?php echo $entry_paymode; ?></td>
 			</tr>
 		   <tr class="with-select">
             <td><span class="required">*</span> <?php echo $entry_methods; ?></td>
             <td>
-				<input type="checkbox" name="yandexmoney_method_ym" value="1" id="ym_method_1"<?php if ($yandexmoney_method_ym){?> checked <?php } ?> /><label for="ym_method_1"><?php echo $entry_method_ym; ?></label> <br/>
-				<input type="checkbox" name="yandexmoney_method_cards" value="1" id="ym_method_2" <?php if ($yandexmoney_method_cards){?> checked <?php } ?>/><label for="ym_method_2"><?php echo $entry_method_cards; ?></label> <br/>
+				<input type="checkbox" name="yandexmoney_method_ym" value="1" id="ym_method_1"<?php if ($yandexmoney_method_ym){ ?> checked <?php } ?> /><label for="ym_method_1"><?php echo $entry_method_ym; ?></label> <br/>
+				<input type="checkbox" name="yandexmoney_method_cards" value="1" id="ym_method_2" <?php if ($yandexmoney_method_cards){ ?> checked <?php } ?>/><label for="ym_method_2"><?php echo $entry_method_cards; ?></label> <br/>
 				<div class="org">
-					<input type="checkbox" name="yandexmoney_method_cash" value="1" id="ym_method_3" <?php if ($yandexmoney_method_cash){?> checked <?php } ?>/><label for="ym_method_3"><?php echo $entry_method_cash; ?></label> <br/>
-					<input type="checkbox" name="yandexmoney_method_mobile" value="1" id="ym_method_4" <?php if ($yandexmoney_method_mobile){?> checked <?php } ?>/><label for="ym_method_4"><?php echo $entry_method_mobile; ?></label> <br/>
-					<input type="checkbox" name="yandexmoney_method_wm" value="1" id="ym_method_5"<?php if ($yandexmoney_method_wm){?> checked <?php } ?> /><label for="ym_method_5"><?php echo $entry_method_wm; ?></label> <br/>
-					<input type="checkbox" name="yandexmoney_method_ab" value="1" id="ym_method_6"<?php if ($yandexmoney_method_ab){?> checked <?php } ?> /><label for="ym_method_6"><?php echo $entry_method_ab; ?></label> <br/>
-					<input type="checkbox" name="yandexmoney_method_sb" value="1" id="ym_method_7"<?php if ($yandexmoney_method_sb){?> checked <?php } ?> /><label for="ym_method_7"><?php echo $entry_method_sb; ?></label> <br/>
-					<input type="checkbox" name="yandexmoney_method_ma" value="1" id="ym_method_8"<?php if ($yandexmoney_method_ma){?> checked <?php } ?> /><label for="ym_method_8"><?php echo $entry_method_ma; ?></label> <br/>
-					<input type="checkbox" name="yandexmoney_method_pb" value="1" id="ym_method_9"<?php if ($yandexmoney_method_pb){?> checked <?php } ?> /><label for="ym_method_9"><?php echo $entry_method_pb; ?></label> <br/>
-					<input type="checkbox" name="yandexmoney_method_qw" value="1" id="ym_method_11"<?php if ($yandexmoney_method_qw){?> checked <?php } ?> /><label for="ym_method_11"><?php echo $entry_method_qw; ?></label> <br/>
-					<input type="checkbox" name="yandexmoney_method_qp" value="1" id="ym_method_12"<?php if ($yandexmoney_method_qp){?> checked <?php } ?> /><label for="ym_method_12"><?php echo $entry_method_qp; ?></label> <br/>
-					<input type="checkbox" name="yandexmoney_method_mp" value="1" id="ym_method_10"<?php if ($yandexmoney_method_mp){?> checked <?php } ?> /><label for="ym_method_10"><?php echo $entry_method_mp; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_cash" value="1" id="ym_method_3" <?php if ($yandexmoney_method_cash){ ?> checked <?php } ?>/><label for="ym_method_3"><?php echo $entry_method_cash; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_mobile" value="1" id="ym_method_4" <?php if ($yandexmoney_method_mobile){ ?> checked <?php } ?>/><label for="ym_method_4"><?php echo $entry_method_mobile; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_wm" value="1" id="ym_method_5"<?php if ($yandexmoney_method_wm){ ?> checked <?php } ?> /><label for="ym_method_5"><?php echo $entry_method_wm; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_ab" value="1" id="ym_method_6"<?php if ($yandexmoney_method_ab){ ?> checked <?php } ?> /><label for="ym_method_6"><?php echo $entry_method_ab; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_sb" value="1" id="ym_method_7"<?php if ($yandexmoney_method_sb){ ?> checked <?php } ?> /><label for="ym_method_7"><?php echo $entry_method_sb; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_ma" value="1" id="ym_method_8"<?php if ($yandexmoney_method_ma){ ?> checked <?php } ?> /><label for="ym_method_8"><?php echo $entry_method_ma; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_pb" value="1" id="ym_method_9"<?php if ($yandexmoney_method_pb){ ?> checked <?php } ?> /><label for="ym_method_9"><?php echo $entry_method_pb; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_qw" value="1" id="ym_method_11"<?php if ($yandexmoney_method_qw){ ?> checked <?php } ?> /><label for="ym_method_11"><?php echo $entry_method_qw; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_qp" value="1" id="ym_method_12"<?php if ($yandexmoney_method_qp){ ?> checked <?php } ?> /><label for="ym_method_12"><?php echo $entry_method_qp; ?></label> <br/>
+					<input type="checkbox" name="yandexmoney_method_mp" value="1" id="ym_method_10"<?php if ($yandexmoney_method_mp){ ?> checked <?php } ?> /><label for="ym_method_10"><?php echo $entry_method_mp; ?></label> <br/>
 				</div>
 				 <?php if ($error_methods) { ?>
 					<span class="error"><?php echo $error_methods; ?></span>
@@ -246,7 +246,7 @@
           </tr>
 			 <tr>
             <td><?php echo $entry_notify; ?></td>
-            <td><input type="checkbox" name="yandexmoney_notify" value="1" <?php if ($yandexmoney_notify){?> checked <?php } ?> /></td>
+            <td><input type="checkbox" name="yandexmoney_notify" value="1" <?php if ($yandexmoney_notify){ ?> checked <?php } ?> /></td>
           </tr>
           <tr>
             <td><?php echo $entry_geo_zone; ?></td>

@@ -1,6 +1,6 @@
 <?php if (isset($header)) echo $header;?>
 <form method="POST" id='YamoneyForm' action="<?php echo $action; ?>">
-   <?php if (!$epl){?>
+   <?php if (!$epl){ ?>
 	<h3><?php echo $method_label; ?></h3>
    <table class="radio">
 		<tbody>
@@ -15,7 +15,7 @@
 		<?php }} ?>
 		</tbody>
    </table>
-	<?php } else {?>
+	<?php } else { ?>
 		<input type="hidden" name="paymentType" value="">
 	<?php } 
 	if ($org_mode){ ?>
@@ -26,8 +26,8 @@
 		<input type="hidden" name="customerNumber" value="<?php echo $customerNumber; ?>" >
 		<input type="hidden" name="shopSuccessURL" value="<?php echo $shopSuccessURL; ?>" >
 		<input type="hidden" name="shopFailURL" value="<?php echo $shopFailURL; ?>" >
-		<?php if (isset($phone)) {?> <input type="hidden" name="cps_phone" value="<?php echo $phone;?>"> <?php } ?>
-		<?php if (isset($email)) {?> <input type="hidden" name="cps_email" value="<?php echo $email;?>"> <?php } ?>
+		<?php if (isset($phone)) { ?> <input type="hidden" name="cps_phone" value="<?php echo $phone;?>"> <?php } ?>
+		<?php if (isset($email)) { ?> <input type="hidden" name="cps_email" value="<?php echo $email;?>"> <?php } ?>
 		<input type="hidden" name="cms_name" value="opencart" >
 <?php }else{ ?>
    <input type="hidden" name="receiver" value="<?php echo $account; ?>">
