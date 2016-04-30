@@ -95,40 +95,32 @@ class ControllerPaymentYandexMoney extends Controller {
 			$order_id = ($ymObj->org_mode)?$callbackParams["orderNumber"]:$callbackParams["label"];
 		}else{ $order_id =0;}
 
-        //$this->log->write(print_r($callbackParams, true));
-        //$this->log->write(print_r($ymObj, true));
-        //$this->log->write(print_r($order_id, true));
-
 		if ($ymObj->checkSign($callbackParams)){
 			$this->load->model('checkout/order');
 			$order_info = $this->model_checkout_order->getOrder($order_id);
 
-         //$this->log->write(print_r($order_info, true));
-         //$this->log->write(number_format($callbackParams[($ymObj->org_mode)?'orderSumAmount':'withdraw_amount'], 2, '.', ''));
-         //$this->log->write(number_format($order_info['total'], 2, '.', ''));
-
 			if ($order_info!=false){
 				$comment=($ymObj->org_mode && $callbackParams['paymentType']=="MP" && isset($callbackParams['orderDetails']))?$callbackParams['orderDetails']:'';
+				
+				// changed: amount is replaced by withdraw_amount which is used in production mode
 				$amount = number_format($callbackParams[($ymObj->org_mode)?'orderSumAmount':'withdraw_amount'], 2, '.', '');
 
-            // confirm call is required before any update call
-            $this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id'),$comment);
-
-            if ((isset($callbackParams['paymentType']) && $callbackParams['paymentType']=="MP") || $amount == number_format($order_info['total'], 2, '.', '')){
+                // changed: confirm call is required before any update call. confirm method doesn't return any value
+                $this->model_checkout_order->confirm($order_id, $this->config->get('config_order_status_id'),$comment);
+                
+                // changed: isset($callbackParams['paymentType']) was added, without this check code throws an erorr in production mode
+                if ((isset($callbackParams['paymentType']) && $callbackParams['paymentType']=="MP") || $amount == number_format($order_info['total'], 2, '.', '')){
 					if (isset($callbackParams['action']) && $callbackParams['action'] == 'paymentAviso'){
+						
+						// changed: update method doesn't return any value
 						$this->model_checkout_order->update($order_id, $this->config->get('yandexmoney_order_status_id'), "Номер транзакции: ".$callbackParams['invoiceId'].". Сумма: ".$callbackParams['orderSumAmount'].' '.$comment, $notify);
 					}elseif (isset($callbackParams["label"]) && !$ymObj->org_mode){
-
 						$sender=($callbackParams['sender']!='')?"Номер кошелька Яндекс.Денег: ".$callbackParams['sender'].".":'';
 
-                        //$this->log->write(print_r($order_id, true));
-                        //$this->log->write(print_r($this->config->get('yandexmoney_order_status_id'), true));
-                        //$this->log->write(print_r($sender." Сумма: ".$callbackParams['amount'].' '.$comment, true));
-                        //$this->log->write(print_r($notify, true));
-
+                        // changed: update method doesn't return any value
+                        // changed: confirm method call moved above since its call requred before update method call,
+                        // otherwise order status won't be updated                        
 						$this->model_checkout_order->update($order_id, $this->config->get('yandexmoney_order_status_id'), $sender." Сумма: ".$callbackParams['amount'].' '.$comment, $notify);
-
-                        //$this->log->write(print_r($res, true));
 					}
 
 					$ymObj->sendCode($callbackParams, "0");
